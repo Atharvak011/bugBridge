@@ -15,11 +15,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for testing purposes
-                .cors(cors -> {}) // Enable CORS with default configuration
+                .cors(cors -> {
+                }) // Enable CORS with default configuration
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().permitAll() // Allow all requests without authentication
                 );
-
         return http.build();
     }
 
