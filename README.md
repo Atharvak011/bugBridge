@@ -22,3 +22,4 @@ example - /api/register
 11.
 
 checking the change in redme file
+changes made by pratham
