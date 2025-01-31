@@ -1,4 +1,4 @@
 .gitignore
 .DS_Store
-bugbridge/src/main/resources/
+bugbridge/src/main/resources/application.properties
 .vscode
