@@ -24,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 @RequestMapping("/api")
 public class UserController {
 
-
   private final UserService userService;
 
   @Autowired
@@ -41,37 +40,30 @@ public class UserController {
     return ResponseEntity.ok(users);
   }
 
-
-
-
   // Registering a new User
   @PostMapping("/register")
   public ResponseEntity<UserApiResponse> addUser(@RequestBody UserDTO userDTO) {
     try {
       userService.addUser(userDTO);
-      UserResponse userResponse = new UserResponse(userDTO.getName(), userDTO.getEmail(), UserRole.valueOf(userDTO.getRole()));
+      UserResponse userResponse = new UserResponse(userDTO.getName(), userDTO.getEmail(),
+          UserRole.valueOf(userDTO.getRole()));
       return ResponseEntity.ok(new UserApiResponse(200, "Success", "/api/login", userResponse));
     } catch (UserException.UserAlreadyExistsException ex) {
       return ResponseEntity.status(400).body(new UserApiResponse(400, "Error", ex.getMessage(), "/api/register"));
     }
   }
 
-
-
-
   // login Validation
   @PostMapping("/authenticate")
-  public ResponseEntity<UserApiResponse> authenticateUser(@RequestBody UserDTO userDTO)
-  {
-    boolean val= userService.findUserByEmail(userDTO);
+  public ResponseEntity<UserApiResponse> authenticateUser(@RequestBody UserDTO userDTO) {
+    boolean val = userService.findUserByEmail(userDTO);
     System.out.println(val);
-    if(val){
+    if (val) {
       return ResponseEntity.ok(new UserApiResponse(200, "Authentication Success", "/api/dashboard"));
     }
-    return  ResponseEntity.ok(new UserApiResponse(200, "Login credentials Incorrect","Authentication Failed", "/api/login"));
+    return ResponseEntity
+        .ok(new UserApiResponse(200, "Login credentials Incorrect", "Authentication Failed", "/api/login"));
   }
-
-
 
   // only admin can delete
   @DeleteMapping("/admin/deleteUser/{emailId}")
@@ -84,9 +76,5 @@ public class UserController {
       return ResponseEntity.status(400).body(new UserApiResponse(400, "Error", ex.getMessage(), "/api/users"));
     }
   }
-
-
-
-
 
 }
