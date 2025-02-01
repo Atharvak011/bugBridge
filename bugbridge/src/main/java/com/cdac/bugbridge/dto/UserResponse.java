@@ -1,26 +1,28 @@
 package com.cdac.bugbridge.dto;
 
-import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-import com.cdac.bugbridge.util.UserRole;
-
-//@Service
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserResponse {
-
 
   private Integer id;
   private String name;
   private String email;
-  private UserRole role;
+  private String role;
+
+  public UserResponse() {
+
+  }
 
   // Constructor
-  public UserResponse( String name, String email, UserRole role) {
+  public UserResponse(String name, String email, String role) {
     this.name = name;
     this.email = email;
     this.role = role;
   }
+
   // Constructor
-  public UserResponse(Integer id, String name, String email, UserRole role) {
+  public UserResponse(Integer id, String name, String email, String role) {
     this.id = id;
     this.name = name;
     this.email = email;
@@ -52,12 +54,22 @@ public class UserResponse {
     this.email = email;
   }
 
-  public UserRole getRole() {
+  public String getRole() {
     return role;
   }
 
   public void setRole(String role) {
-    this.role = UserRole.fromString(role);
+    this.role = role;
+  }
+
+  @Override
+  public String toString() {
+    return "User{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", email='" + email + '\'' +
+        ", role=" + role +
+        '}';
   }
 
 }

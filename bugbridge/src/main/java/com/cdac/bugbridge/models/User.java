@@ -34,7 +34,7 @@ public class User {
   }
 
   // Parameterized Constructor for Login
-  public User(String email,String password) {
+  public User(String email, String password) {
     this.email = email;
     this.password = password;
   }
@@ -52,9 +52,9 @@ public class User {
     return id;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
+  // public void setId(Integer id) {
+  // this.id = id;
+  // }
 
   public String getName() {
     return name;
@@ -75,9 +75,9 @@ public class User {
   public UserRole getRole() {
     return role;
   }
-  
+
   public void setRole(String role) {
-    this.role = UserRole.fromString(role);
+    this.role = UserRole.fromString(role.trim().toUpperCase());
   }
 
   public String getPassword() {
@@ -91,11 +91,11 @@ public class User {
   @Override
   public String toString() {
     return "User{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
-            ", email='" + email + '\'' +
-            ", role=" + role +
-            ", password='" + password + '\'' +
-            '}';
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", email='" + email + '\'' +
+        ", role=" + role +
+        ", password='" + password + '\'' +
+        '}';
   }
 }

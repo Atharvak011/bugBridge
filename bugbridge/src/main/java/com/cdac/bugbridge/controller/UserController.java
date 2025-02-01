@@ -5,19 +5,12 @@ import com.cdac.bugbridge.service.UserService;
 import com.cdac.bugbridge.util.UserRole;
 import org.springframework.web.bind.annotation.*;
 
-import com.cdac.bugbridge.dao.UserDAO;
-import com.cdac.bugbridge.dao.UserDAOImpl;
 import com.cdac.bugbridge.dto.UserDTO;
 import com.cdac.bugbridge.dto.UserResponse;
-import com.cdac.bugbridge.models.User;
 import com.cdac.bugbridge.response.UserApiResponse;
-import com.cdac.bugbridge.service.UserServiceImpl;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @RestController
@@ -31,38 +24,11 @@ public class UserController {
     this.userService = userService;
   }
 
-  // want only admin role to access this api
-  @GetMapping
-  public ResponseEntity<List<UserApiResponse>> getUsers(@RequestParam String param) {
-    List<UserApiResponse> users = new ArrayList<>();
-    UserResponse userResponse = new UserResponse(null, null, null, null);
-    users.add(new UserApiResponse(0, null, "/api/users", userResponse));
-    return ResponseEntity.ok(users);
-  }
-
-  // Registering a new User
-  @PostMapping("/register")
-  public ResponseEntity<UserApiResponse> addUser(@RequestBody UserDTO userDTO) {
-    try {
-      userService.addUser(userDTO);
-      UserResponse userResponse = new UserResponse(userDTO.getName(), userDTO.getEmail(),
-          UserRole.valueOf(userDTO.getRole()));
-      return ResponseEntity.ok(new UserApiResponse(200, "Success", "/api/login", userResponse));
-    } catch (UserException.UserAlreadyExistsException ex) {
-      return ResponseEntity.status(400).body(new UserApiResponse(400, "Error", ex.getMessage(), "/api/register"));
-    }
-  }
-
-  // login Validation
-  @PostMapping("/authenticate")
-  public ResponseEntity<UserApiResponse> authenticateUser(@RequestBody UserDTO userDTO) {
-    boolean val = userService.findUserByEmail(userDTO);
-    System.out.println(val);
-    if (val) {
-      return ResponseEntity.ok(new UserApiResponse(200, "Authentication Success", "/api/dashboard"));
-    }
-    return ResponseEntity
-        .ok(new UserApiResponse(200, "Login credentials Incorrect", "Authentication Failed", "/api/login"));
+  // want only admin role to access this api -- DONE
+  @GetMapping("/admin/users")
+  public ResponseEntity<UserApiResponse> getAllUsers() {
+    UserApiResponse userApiResponse = userService.listAllUsers();
+    return ResponseEntity.ok(userApiResponse);
   }
 
   // only admin can delete
@@ -71,10 +37,40 @@ public class UserController {
     try {
       userService.deleteUserByEmail(emailId);
       UserResponse userResponse = new UserResponse(null, null, null, null);
-      return ResponseEntity.ok(new UserApiResponse(200, "Success", "/dashboard", userResponse));
+      return ResponseEntity.ok(new UserApiResponse(200, "Success", "/dashboard", userResponse, null));
     } catch (Exception ex) {
-      return ResponseEntity.status(400).body(new UserApiResponse(400, "Error", ex.getMessage(), "/api/users"));
+      return ResponseEntity.status(400).body(new UserApiResponse(400, ex.getMessage(), "/api/users", null, null));
     }
+  }
+
+  // Registering a new User
+  @PostMapping("/register")
+  public ResponseEntity<UserApiResponse> addUser(@RequestBody UserDTO userDTO) {
+    try {
+      userService.addUser(userDTO);
+      UserResponse userResponse = new UserResponse(userDTO.getName(), userDTO.getEmail(),
+          userDTO.getRole());
+      return ResponseEntity.ok(new UserApiResponse(200, "Success", "/api/login", userResponse, null));
+    } catch (UserException.UserAlreadyExistsException ex) {
+      return ResponseEntity.status(400).body(new UserApiResponse(400, ex.getMessage(), "/api/register", null, null));
+    }
+  }
+
+  // login Validation
+  @PostMapping("/authenticate")
+  public ResponseEntity<UserApiResponse> authenticateUser(@RequestBody UserDTO userDTO) {
+    boolean val = userService.findUserByEmail(userDTO);
+    if (val) {
+      return ResponseEntity.ok(new UserApiResponse(200, "Authentication Success", "/api/dashboard"));
+    }
+    return ResponseEntity
+        .ok(new UserApiResponse(200, "Login credentials Incorrect", "/api/login"));
+  }
+
+  @PatchMapping("/authorized/profileInfo/updateUserDetails")
+  public ResponseEntity<UserApiResponse> updateUserDetails(@RequestBody UserDTO userDTO) {
+    return ResponseEntity.ok(userService.updateUser(userDTO.getId(), userDTO));
+
   }
 
 }

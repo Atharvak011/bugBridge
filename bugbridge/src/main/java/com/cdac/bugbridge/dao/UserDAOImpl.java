@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cdac.bugbridge.repository.UserRepository;
+import com.cdac.bugbridge.util.UserRole;
 
 @Service
 public class UserDAOImpl implements UserDAO {
@@ -21,31 +22,31 @@ public class UserDAOImpl implements UserDAO {
     this.userRepository = userRepository;
   }
 
-
-
   // Registering a new user and saving to the database
   @Override
   public void addUser(User entityUser) throws UserException.UserAlreadyExistsException {
-    try{
-    userRepository.save(entityUser);
+    try {
+      userRepository.save(entityUser);
     } catch (Exception ex) {
-      throw new UserException.UserAlreadyExistsException("Error: "+ex);
+      throw new UserException.UserAlreadyExistsException("Error: " + ex);
     }
   }
 
-
-
+  // finding a user by email id
+  @Override
+  public Optional<User> findUserByEmail(String emailId) {
+    return userRepository.findByEmail(emailId);
+  }
 
   // finding a user by email id
   @Override
-  public Optional<User> findUserByEmail(String emailId)  {
-    return userRepository.findByEmail(emailId);
+  public Optional<User> findUserById(Integer userId) {
+    return userRepository.findById(userId);
   }
 
   @Override
   public void deleteUser(String emailId) {
     // TODO Auto-generated method stub
-
 
   }
 
@@ -70,21 +71,17 @@ public class UserDAOImpl implements UserDAO {
 
   }
 
-
   @Override
   public List<User> listAllUsers() {
-    // TODO Auto-generated method stub
-    return null;
-
+    return userRepository.findAll();
   }
-
 
   @Override
-  public void updateUser(String emailId, User userDetails) {
-    // TODO Auto-generated method stub
-
+  public int updateUser(Integer uniqueId, User userDetails) {
+    String userName = userDetails.getName();
+    String userNewEmail = userDetails.getEmail();
+    UserRole userRole = userDetails.getRole();
+    return userRepository.updateById(uniqueId, userNewEmail, userName, userRole);
   }
-
-
 
 }
