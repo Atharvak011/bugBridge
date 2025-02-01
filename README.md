@@ -22,3 +22,4 @@ example - /api/register
 11.
 No changes all are deleted
 
+changes by atharva
