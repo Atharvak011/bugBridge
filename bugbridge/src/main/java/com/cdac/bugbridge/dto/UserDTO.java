@@ -3,8 +3,6 @@ package com.cdac.bugbridge.dto;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.stereotype.Service;
 
-import com.cdac.bugbridge.util.UserRole;
-
 @Service
 public class UserDTO {
 

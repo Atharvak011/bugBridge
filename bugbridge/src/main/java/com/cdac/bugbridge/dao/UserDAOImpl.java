@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.cdac.bugbridge.exception.UserException;
 import com.cdac.bugbridge.models.User;
-import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cdac.bugbridge.repository.UserRepository;
@@ -17,7 +17,7 @@ public class UserDAOImpl implements UserDAO {
   private final UserRepository userRepository;
 
   // Constructor
-  @Autowired
+  // @Autowired
   public UserDAOImpl(UserRepository userRepository) {
     this.userRepository = userRepository;
   }

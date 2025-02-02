@@ -4,7 +4,7 @@ import com.cdac.bugbridge.dto.UserDTO;
 import com.cdac.bugbridge.exception.UserException;
 import com.cdac.bugbridge.response.UserApiResponse;
 
-import java.util.List;
+
 
 public interface UserService {
 
@@ -15,6 +15,7 @@ public interface UserService {
   // finding a user by userId -- DONE
   UserApiResponse findUserById(Integer userId);
 
+  // for login authentication
   // Only Developer and Tester roles allowed
   boolean findUserByEmail(UserDTO userDTO);
 

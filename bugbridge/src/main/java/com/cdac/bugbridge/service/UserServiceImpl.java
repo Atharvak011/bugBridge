@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     this.modelMapper = modelMapper;
   }
 
-  // Registering new user -- DONE
+  // -- DONE
   @Override
   public void addUser(UserDTO userDTO) throws UserException.UserAlreadyExistsException {
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
     userDao.addUser(entityUser);
   }
 
+  // -- DONE
   @Override
   public UserApiResponse findUserById(Integer userId) {
     UserResponse responseUser = new UserResponse();
@@ -54,6 +55,7 @@ public class UserServiceImpl implements UserService {
     return new UserApiResponse(200, "User Not found", "/api/users/dashboard", null, null);
   }
 
+  // -- DONE for login check
   @Override
   public boolean findUserByEmail(UserDTO userDTO) {
     String emailId = userDTO.getEmail();
@@ -91,8 +93,8 @@ public class UserServiceImpl implements UserService {
   @Transactional
   public UserApiResponse deleteUserById(Integer userId) {
     int rowsAffected = userDao.deleteUserById(userId);
-    return rowsAffected > 0 ? new UserApiResponse(201, "Acount Deletion Sucessful", "api/allUsers/dashboard")
-        : new UserApiResponse(402, "Account Not Registered", "api/allUsers/dashboard");
+    return rowsAffected > 0 ? new UserApiResponse(201, "Acount Deletion Sucessful", "api/users/allUsers/dashboard")
+        : new UserApiResponse(402, "Account Not Registered", "api/users/allUsers/dashboard");
   }
 
   @Override
@@ -115,33 +117,12 @@ public class UserServiceImpl implements UserService {
         .stream()
         .map(user -> modelMapper.map(user, UserResponse.class))
         .collect(Collectors.toList());
-    return new UserApiResponse(200, "List of All users", "/api/admin/users", null, userList);
+    return new UserApiResponse(200, "List of All users", "/api/users/admin/users", null, userList);
   }
 
   @Override
   @Transactional
   public UserApiResponse updateUser(Integer userId, UserDTO userDTO) {
-    // Optional<User> userByEmail = userDao.findUserById(userId);
-    // if (userByEmail.isPresent()) {
-    // User user = userByEmail.get();
-    // // Handle null 'role' using Optional
-    // Optional.ofNullable(userDTO.getRole())
-    // .map(String::trim) // Trim and check if not empty
-    // .filter(role -> !role.isEmpty()) // Only set if not empty
-    // .ifPresent(role -> user.setRole(role.toUpperCase()));
-    // // Manually copy other properties
-    // Optional.ofNullable(userDTO.getName()).ifPresent(user::setName);
-    // Optional.ofNullable(userDTO.getEmail()).ifPresent(user::setEmail);
-    // int rowsAffected = userDao.updateUser(userId, user);
-    // UserApiResponse response = rowsAffected > 0
-    // ? new UserApiResponse(201, "User Details Updated",
-    // "api/authorized/profileInfo")
-    // : new UserApiResponse(403, "User Details Not Updated",
-    // "api/authorized/profileInfo");
-    // return response;
-    // }
-    // return new UserApiResponse(404, "User Not Found",
-    // "api/authorized/profileInfo");
     return userDao.findUserById(userId)
         .map(user -> {
           Optional.ofNullable(userDTO.getRole())
@@ -154,10 +135,10 @@ public class UserServiceImpl implements UserService {
 
           int rowsAffected = userDao.updateUser(userId, user);
           return rowsAffected > 0
-              ? new UserApiResponse(201, "User Details Updated", "api/authorized/profileInfo")
-              : new UserApiResponse(403, "User Details Not Updated", "api/authorized/profileInfo");
+              ? new UserApiResponse(201, "User Details Updated", "api/users/profileInfo")
+              : new UserApiResponse(403, "User Details Not Updated", "api/users/profileInfo");
         })
-        .orElse(new UserApiResponse(404, "User Not Found", "api/authorized/profileInfo"));
+        .orElse(new UserApiResponse(404, "User Not Found", "api/users/profileInfo"));
 
   }
 
