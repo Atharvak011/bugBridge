@@ -45,16 +45,19 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public void deleteUser(String emailId) {
-    // TODO Auto-generated method stub
+  public int deleteUserByEmail(String emailId) {
+    return 0;
 
   }
 
   @Override
-  public List<User> listTesters() {
-    // TODO Auto-generated method stub
-    return null;
+  public int deleteUserById(Integer userId) {
+    return userRepository.deleteUserById(userId);
+  }
 
+  @Override
+  public List<User> listTesters() {
+    return userRepository.findByRole(UserRole.TESTER);
   }
 
   @Override

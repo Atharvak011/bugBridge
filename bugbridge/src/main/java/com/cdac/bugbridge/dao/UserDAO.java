@@ -18,7 +18,10 @@ public interface UserDAO {
   Optional<User> findUserById(Integer userId);
 
   // Delete a user by emailId (only admin can delete)
-  void deleteUser(String emailId); // Only admin can delete
+  int deleteUserByEmail(String emailId); // Only admin can delete
+
+  // Delete a user by userId (only admin can delete)
+  int deleteUserById(Integer userId); // Only admin can delete
 
   // List all testers
   List<User> listTesters(); // Return a list of testers

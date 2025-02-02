@@ -12,11 +12,9 @@ import jakarta.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,7 +26,6 @@ public class UserServiceImpl implements UserService {
 
   private final ModelMapper modelMapper;
 
-  @Autowired
   public UserServiceImpl(UserDAO userDao, ModelMapper modelMapper) {
     this.userDao = userDao;
     this.modelMapper = modelMapper;
@@ -45,7 +42,18 @@ public class UserServiceImpl implements UserService {
     userDao.addUser(entityUser);
   }
 
-  // finding a user by email
+  @Override
+  public UserApiResponse findUserById(Integer userId) {
+    UserResponse responseUser = new UserResponse();
+    Optional<User> userByEmail = userDao.findUserById(userId);
+    if (userByEmail.isPresent()) {
+      User user = userByEmail.get();
+      responseUser = modelMapper.map(user, UserResponse.class);
+      return new UserApiResponse(200, "User found", "/api/users/dashboard", responseUser, null);
+    }
+    return new UserApiResponse(200, "User Not found", "/api/users/dashboard", null, null);
+  }
+
   @Override
   public boolean findUserByEmail(UserDTO userDTO) {
     String emailId = userDTO.getEmail();
@@ -60,7 +68,6 @@ public class UserServiceImpl implements UserService {
 
   }
 
-  // finding a user by User id
   @Override
   public boolean findUserById(UserDTO userDTO) {
     Integer userId = userDTO.getId();
@@ -74,25 +81,32 @@ public class UserServiceImpl implements UserService {
     return false;
   }
 
-  // delete a user using email
   @Override
+  @Transactional
   public void deleteUserByEmail(String emailId) {
 
   }
 
   @Override
-  public List<UserDTO> listTesters() {
-    return List.of();
+  @Transactional
+  public UserApiResponse deleteUserById(Integer userId) {
+    int rowsAffected = userDao.deleteUserById(userId);
+    return rowsAffected > 0 ? new UserApiResponse(201, "Acount Deletion Sucessful", "api/allUsers/dashboard")
+        : new UserApiResponse(402, "Account Not Registered", "api/allUsers/dashboard");
   }
 
   @Override
-  public List<UserDTO> listDevelopers() {
-    return List.of();
-  }
-
-  @Override
-  public List<UserDTO> listDevelopersAndTesters() {
-    return List.of();
+  public UserApiResponse listByRole(String role) {
+    List<User> userList = userDao.listAllUsers();
+    List<UserResponse> filteredResponses = userList.stream()
+        .filter(user -> role.equalsIgnoreCase("all")
+            ? !user.getRole().equals(UserRole.ADMIN)
+            : user.getRole().name().equalsIgnoreCase(role))
+        .map(user -> modelMapper.map(user, UserResponse.class))
+        .collect(Collectors.toList());
+    return new UserApiResponse(200, "List of All " + (role.equalsIgnoreCase("all") ? "Users" : role), "/api/users",
+        null,
+        filteredResponses);
   }
 
   @Override

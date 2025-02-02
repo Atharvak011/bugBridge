@@ -19,8 +19,16 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
 
     @Modifying
-    @Query("UPDATE User u SET u.name = :name, u.email = :newEmail, u.role = :role WHERE u.id = :uniqueId")
-    int updateById(@Param("uniqueId") Integer uniqueId, @Param("newEmail") String newEmail,
+    @Query("UPDATE User u SET u.name = :name, u.email = :newEmail, u.role = :role WHERE u.id = :userId")
+    int updateById(@Param("userId") Integer uniqueId, @Param("newEmail") String newEmail,
             @Param("name") String name, @Param("role") UserRole role);
+
+    // deleting user by ID
+    @Modifying
+    @Query("DELETE from User u WHERE u.id = :userId")
+    int deleteUserById(@Param("userId") Integer userId);
+
+    // finding users by role
+    List<User> findByRole(UserRole role);
 
 }
