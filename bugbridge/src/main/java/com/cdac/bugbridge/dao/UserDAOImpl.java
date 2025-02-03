@@ -5,10 +5,11 @@ import java.util.Optional;
 
 import com.cdac.bugbridge.exception.UserException;
 import com.cdac.bugbridge.models.User;
-import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cdac.bugbridge.repository.UserRepository;
+import com.cdac.bugbridge.util.UserRole;
 
 @Service
 public class UserDAOImpl implements UserDAO {
@@ -16,44 +17,47 @@ public class UserDAOImpl implements UserDAO {
   private final UserRepository userRepository;
 
   // Constructor
-  @Autowired
+  // @Autowired
   public UserDAOImpl(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
-
-
   // Registering a new user and saving to the database
   @Override
   public void addUser(User entityUser) throws UserException.UserAlreadyExistsException {
-    try{
-    userRepository.save(entityUser);
+    try {
+      userRepository.save(entityUser);
     } catch (Exception ex) {
-      throw new UserException.UserAlreadyExistsException("Error: "+ex);
+      throw new UserException.UserAlreadyExistsException("Error: " + ex);
     }
   }
 
-
-
-
   // finding a user by email id
   @Override
-  public Optional<User> findUserByEmail(String emailId)  {
+  public Optional<User> findUserByEmail(String emailId) {
     return userRepository.findByEmail(emailId);
   }
 
+  // finding a user by email id
   @Override
-  public void deleteUser(String emailId) {
-    // TODO Auto-generated method stub
+  public Optional<User> findUserById(Integer userId) {
+    return userRepository.findById(userId);
+  }
 
+  @Override
+  public int deleteUserByEmail(String emailId) {
+    return 0;
 
+  }
+
+  @Override
+  public int deleteUserById(Integer userId) {
+    return userRepository.deleteUserById(userId);
   }
 
   @Override
   public List<User> listTesters() {
-    // TODO Auto-generated method stub
-    return null;
-
+    return userRepository.findByRole(UserRole.TESTER);
   }
 
   @Override
@@ -70,21 +74,17 @@ public class UserDAOImpl implements UserDAO {
 
   }
 
-
   @Override
   public List<User> listAllUsers() {
-    // TODO Auto-generated method stub
-    return null;
-
+    return userRepository.findAll();
   }
-
 
   @Override
-  public void updateUser(String emailId, User userDetails) {
-    // TODO Auto-generated method stub
-
+  public int updateUser(Integer uniqueId, User userDetails) {
+    String userName = userDetails.getName();
+    String userNewEmail = userDetails.getEmail();
+    UserRole userRole = userDetails.getRole();
+    return userRepository.updateById(uniqueId, userNewEmail, userName, userRole);
   }
-
-
 
 }

@@ -2,79 +2,82 @@ package com.cdac.bugbridge.controller;
 
 import com.cdac.bugbridge.exception.UserException;
 import com.cdac.bugbridge.service.UserService;
-import com.cdac.bugbridge.util.UserRole;
 import org.springframework.web.bind.annotation.*;
 
-import com.cdac.bugbridge.dao.UserDAO;
-import com.cdac.bugbridge.dao.UserDAOImpl;
 import com.cdac.bugbridge.dto.UserDTO;
 import com.cdac.bugbridge.dto.UserResponse;
-import com.cdac.bugbridge.models.User;
 import com.cdac.bugbridge.response.UserApiResponse;
-import com.cdac.bugbridge.service.UserServiceImpl;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UserController {
 
   private final UserService userService;
 
-  @Autowired
   public UserController(UserService userService) {
     this.userService = userService;
   }
 
-  // want only admin role to access this api
-  @GetMapping
-  public ResponseEntity<List<UserApiResponse>> getUsers(@RequestParam String param) {
-    List<UserApiResponse> users = new ArrayList<>();
-    UserResponse userResponse = new UserResponse(null, null, null, null);
-    users.add(new UserApiResponse(0, null, "/api/users", userResponse));
-    return ResponseEntity.ok(users);
-  }
-
-  // Registering a new User
+  // Registering a new User -- DONE
   @PostMapping("/register")
   public ResponseEntity<UserApiResponse> addUser(@RequestBody UserDTO userDTO) {
     try {
       userService.addUser(userDTO);
       UserResponse userResponse = new UserResponse(userDTO.getName(), userDTO.getEmail(),
-          UserRole.valueOf(userDTO.getRole()));
-      return ResponseEntity.ok(new UserApiResponse(200, "Success", "/api/login", userResponse));
+          userDTO.getRole());
+      return ResponseEntity.ok(new UserApiResponse(200, "Success", "/api/login", userResponse, null));
     } catch (UserException.UserAlreadyExistsException ex) {
-      return ResponseEntity.status(400).body(new UserApiResponse(400, "Error", ex.getMessage(), "/api/register"));
+      return ResponseEntity.status(400).body(new UserApiResponse(400, ex.getMessage(), "/api/register", null, null));
     }
   }
 
-  // login Validation
+  // login Validation -- DONE
   @PostMapping("/authenticate")
   public ResponseEntity<UserApiResponse> authenticateUser(@RequestBody UserDTO userDTO) {
     boolean val = userService.findUserByEmail(userDTO);
-    System.out.println(val);
     if (val) {
       return ResponseEntity.ok(new UserApiResponse(200, "Authentication Success", "/api/dashboard"));
     }
     return ResponseEntity
-        .ok(new UserApiResponse(200, "Login credentials Incorrect", "Authentication Failed", "/api/login"));
+        .ok(new UserApiResponse(200, "Login credentials Incorrect", "/api/login"));
   }
 
-  // only admin can delete
-  @DeleteMapping("/admin/deleteUser/{emailId}")
-  public ResponseEntity<UserApiResponse> addUser(@PathVariable String emailId) {
+  // update User details --DONE
+  @PatchMapping("/updateUserDetails")
+  public ResponseEntity<UserApiResponse> updateUserDetails(@RequestBody UserDTO userDTO) {
+    return ResponseEntity.ok(userService.updateUser(userDTO.getId(), userDTO));
+  }
+
+  // only admin can delete -- DONE
+  @DeleteMapping("/admin/deleteUser/{userId}")
+  public ResponseEntity<UserApiResponse> deleteUser(@PathVariable("userId") Integer userId) {
     try {
-      userService.deleteUserByEmail(emailId);
-      UserResponse userResponse = new UserResponse(null, null, null, null);
-      return ResponseEntity.ok(new UserApiResponse(200, "Success", "/dashboard", userResponse));
+      UserApiResponse response = userService.deleteUserById(userId);
+      return ResponseEntity.ok(response);
     } catch (Exception ex) {
-      return ResponseEntity.status(400).body(new UserApiResponse(400, "Error", ex.getMessage(), "/api/users"));
+      return ResponseEntity.status(400).body(new UserApiResponse(400, ex.getMessage(), "/api/users", null, null));
     }
+  }
+
+  // want only admin role to access this api -- DONE
+  @GetMapping("/singleUserById/{userId}")
+  public ResponseEntity<UserApiResponse> getOneUser(@PathVariable Integer userId) {
+    UserApiResponse userApiResponse = userService.findUserById(userId);
+    return ResponseEntity.ok(userApiResponse);
+  }
+
+  // want only admin role to access this api -- DONE
+  @GetMapping("/admin/allUsers")
+  public ResponseEntity<UserApiResponse> getAllUsers() {
+    UserApiResponse userApiResponse = userService.listAllUsers();
+    return ResponseEntity.ok(userApiResponse);
+  }
+
+  // want only admin role to access this api -- DONE
+  @GetMapping("/{role}")
+  public ResponseEntity<UserApiResponse> getUsersByRole(@PathVariable("role") String role) {
+    return ResponseEntity.ok(userService.listByRole(role));
   }
 
 }

@@ -1,47 +1,40 @@
 package com.cdac.bugbridge.response;
 
 import com.cdac.bugbridge.dto.UserResponse;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-import org.springframework.stereotype.Service;
-
-//@Service
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "timestamp", "status", "message", "path" })
 public class UserApiResponse {
 
   private LocalDateTime timestamp;
   private int status;
-  private String error;
   private String message;
   private String path;
-  private UserResponse userData;
+  private UserResponse userResponse;
+  private List<UserResponse> userList;
 
-  // constructor for normal response
+  // Single constructor for all cases
+  public UserApiResponse(int status, String message, String path, UserResponse userResponse,
+      List<UserResponse> userList) {
+    this.timestamp = LocalDateTime.now();
+    this.status = status;
+    this.message = message;
+    this.path = path;
+    this.userResponse = userResponse;
+    this.userList = userList;
+  }
+
+  // ctor for authentication
   public UserApiResponse(int status, String message, String path) {
     this.timestamp = LocalDateTime.now();
     this.status = status;
-    this.error = "OK";
     this.message = message;
     this.path = path;
-  }
-  // Constructor for successful response
-  public UserApiResponse(int status, String message, String path, UserResponse userData) {
-    this.timestamp = LocalDateTime.now();
-    this.status = status;
-    this.error = "OK";
-    this.message = message;
-    this.path = path;
-    this.userData = userData;
-  }
-
-  // Constructor for error response
-  public UserApiResponse(int status, String error, String message, String path) {
-    this.timestamp = LocalDateTime.now();
-    this.status = status;
-    this.error = error;
-    this.message = message;
-    this.path = path;
-    this.userData = null; // No data in error response
   }
 
   // Getters and setters
@@ -61,14 +54,6 @@ public class UserApiResponse {
     this.status = status;
   }
 
-  public String getError() {
-    return error;
-  }
-
-  public void setError(String error) {
-    this.error = error;
-  }
-
   public String getMessage() {
     return message;
   }
@@ -86,10 +71,20 @@ public class UserApiResponse {
   }
 
   public UserResponse getData() {
-    return userData;
+    return userResponse;
   }
 
-  public void setData(UserResponse userData) {
-    this.userData = userData;
+  public void setData(UserResponse userResponse) {
+    this.userResponse = userResponse;
   }
+
+  public List<UserResponse> getUserList() {
+    return userList;
+  }
+
+  public void setUserList(List<UserResponse> userList) {
+    this.userList = userList;
+  }
+
+  
 }
