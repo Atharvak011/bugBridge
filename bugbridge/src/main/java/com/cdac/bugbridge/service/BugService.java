@@ -10,4 +10,8 @@ public interface BugService {
 
   BugApiResponse createBug(Long reportedBy, Long assignedTo, String description, BugPriority priority);
 
+  BugApiResponse findByAssignedToId(Long id);
+
+  BugApiResponse findAll();
+
 }

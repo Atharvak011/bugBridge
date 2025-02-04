@@ -1,7 +1,12 @@
 package com.cdac.bugbridge.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +70,32 @@ public class BugServiceImpl implements BugService {
     BugDTO bugDTO = modelMapper.map(savedBug, BugDTO.class);
     return new BugApiResponse((savedBug != null ? 201 : 403), (savedBug != null ? "Created" : "Error"), "/api/bugs/",
         bugDTO);
+  }
+
+  @Override
+  @Transactional
+  public BugApiResponse findByAssignedToId(Long id) {
+    List<BugDTO> bugDTOList = bugDAO.findByAssignedToId(id).stream().map(bug -> modelMapper.map(bug, BugDTO.class))
+        .collect(Collectors.toList());
+    return new BugApiResponse(200, "", "/api/bugs", bugDTOList);
+  }
+
+  @Override
+  @Transactional
+  public BugApiResponse findAll() {
+    List<Bug> bugList = bugDAO.findAll();
+
+    // // Initialize lazy fields
+    // bugList.forEach(bug -> {
+    // Hibernate.initialize(bug.getReportedBy());
+    // Hibernate.initialize(bug.getAssignedTo());
+    // });
+
+    List<BugDTO> bugDTOList = bugList.stream()
+        .map(bug -> modelMapper.map(bug, BugDTO.class))
+        .collect(Collectors.toList());
+
+    return new BugApiResponse(200, "", "/api/bugs", bugDTOList);
   }
 
 }

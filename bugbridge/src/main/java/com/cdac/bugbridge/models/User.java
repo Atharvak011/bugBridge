@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cdac.bugbridge.util.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -14,7 +15,7 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Long id;
 
   @Column(name = "name", nullable = false)
   // @Pattern(regexp = "^[a-zA-Z ]{3,50}$", message = "Name must contain only
@@ -33,28 +34,19 @@ public class User {
   private String password;
 
   // Relations
-  // @OneToMany(mappedBy = "assignedTo")
-  // private List<Bug> assignedBugs; // Bugs assigned to this developer
-
-  // @OneToMany(mappedBy = "reportedBy")
-  // private List<Bug> reportedBugs; // Bugs reported by this tester
-
-  // @OneToMany(mappedBy = "tester")
-  // private List<BugAssignment> bugAssignments; // Bugs assigned by this tester
-
-  // @OneToMany(mappedBy = "bug", cascade = CascadeType.ALL, orphanRemoval = true)
-  // private List<BugAssignment> bugAssignments;
-
-  // Relations
+  @JsonIgnore
   @OneToMany(mappedBy = "assignedTo", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Bug> assignedBugs = new ArrayList<>();
 
+  @JsonIgnore
   @OneToMany(mappedBy = "reportedBy", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Bug> reportedBugs = new ArrayList<>();
 
+  @JsonIgnore
   @OneToMany(mappedBy = "tester", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<BugAssignment> assignedBugAssignments = new ArrayList<>();
 
+  @JsonIgnore
   @OneToMany(mappedBy = "developer", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<BugAssignment> receivedBugAssignments = new ArrayList<>();
 
@@ -77,13 +69,13 @@ public class User {
   }
 
   // Getters and Setters
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
-  // public void setId(Integer id) {
-  // this.id = id;
-  // }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
   public String getName() {
     return name;
@@ -115,6 +107,38 @@ public class User {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public List<Bug> getAssignedBugs() {
+    return assignedBugs;
+  }
+
+  public void setAssignedBugs(List<Bug> assignedBugs) {
+    this.assignedBugs = assignedBugs;
+  }
+
+  public List<Bug> getReportedBugs() {
+    return reportedBugs;
+  }
+
+  public void setReportedBugs(List<Bug> reportedBugs) {
+    this.reportedBugs = reportedBugs;
+  }
+
+  public List<BugAssignment> getAssignedBugAssignments() {
+    return assignedBugAssignments;
+  }
+
+  public void setAssignedBugAssignments(List<BugAssignment> assignedBugAssignments) {
+    this.assignedBugAssignments = assignedBugAssignments;
+  }
+
+  public List<BugAssignment> getReceivedBugAssignments() {
+    return receivedBugAssignments;
+  }
+
+  public void setReceivedBugAssignments(List<BugAssignment> receivedBugAssignments) {
+    this.receivedBugAssignments = receivedBugAssignments;
   }
 
   @Override

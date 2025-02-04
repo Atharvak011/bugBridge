@@ -3,7 +3,7 @@ package com.cdac.bugbridge.models;
 import com.cdac.bugbridge.util.BugPriority;
 import com.cdac.bugbridge.util.BugStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
+// import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.persistence.*;
 
@@ -36,11 +36,11 @@ public class Bug {
   @Column(name = "priority", nullable = false)
   private BugPriority priority;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "reported_by", nullable = false)
   private User reportedBy;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "assigned_to")
   private User assignedTo;
 
@@ -82,14 +82,6 @@ public class Bug {
   public void setId(Long id) {
     this.id = id;
   }
-
-  // public Long getVersion() {
-  // return getVersion();
-  // }
-
-  // public void setVersion(Long version) {
-  // this.version = version;
-  // }
 
   public LocalDate getDateReported() {
     return dateReported;

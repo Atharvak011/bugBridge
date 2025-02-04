@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.cdac.bugbridge.dto.BugDTO;
 import com.cdac.bugbridge.models.Bug;
+import com.cdac.bugbridge.models.User;
 
 @Configuration
 public class ModelMapperConfig {
@@ -19,7 +20,7 @@ public class ModelMapperConfig {
       mapper.map(src -> src.getReportedBy().getId(), BugDTO::setReportedBy);
       mapper.map(src -> src.getAssignedTo() != null ? src.getAssignedTo().getId() : null, BugDTO::setAssignedTo);
     });
-
     return modelMapper;
   }
+
 }
