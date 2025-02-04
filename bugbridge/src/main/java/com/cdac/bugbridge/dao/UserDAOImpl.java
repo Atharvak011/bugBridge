@@ -40,38 +40,13 @@ public class UserDAOImpl implements UserDAO {
 
   // finding a user by email id
   @Override
-  public Optional<User> findUserById(Integer userId) {
+  public Optional<User> findUserById(Long userId) {
     return userRepository.findById(userId);
   }
 
   @Override
-  public int deleteUserByEmail(String emailId) {
-    return 0;
-
-  }
-
-  @Override
-  public int deleteUserById(Integer userId) {
+  public int deleteUserById(Long userId) {
     return userRepository.deleteUserById(userId);
-  }
-
-  @Override
-  public List<User> listTesters() {
-    return userRepository.findByRole(UserRole.TESTER);
-  }
-
-  @Override
-  public List<User> listDevelopers() {
-    // TODO Auto-generated method stub
-
-    return null;
-  }
-
-  @Override
-  public List<User> listDevelopersAndTesters() {
-    // TODO Auto-generated method stub
-    return null;
-
   }
 
   @Override
@@ -80,7 +55,7 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public int updateUser(Integer uniqueId, User userDetails) {
+  public int updateUser(Long uniqueId, User userDetails) {
     String userName = userDetails.getName();
     String userNewEmail = userDetails.getEmail();
     UserRole userRole = userDetails.getRole();

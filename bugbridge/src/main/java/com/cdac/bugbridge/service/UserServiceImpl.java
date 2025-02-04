@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
   // -- DONE
   @Override
-  public UserApiResponse findUserById(Integer userId) {
+  public UserApiResponse findUserById(Long userId) {
     UserResponse responseUser = new UserResponse();
     Optional<User> userByEmail = userDao.findUserById(userId);
     if (userByEmail.isPresent()) {
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public boolean findUserById(UserDTO userDTO) {
-    Integer userId = userDTO.getId();
+    Long userId = userDTO.getId();
     Optional<User> userByEmail = userDao.findUserById(userId);
     if (userByEmail.isPresent()) {
       User user = userByEmail.get();
@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public UserApiResponse deleteUserById(Integer userId) {
+  public UserApiResponse deleteUserById(Long userId) {
     int rowsAffected = userDao.deleteUserById(userId);
     return rowsAffected > 0 ? new UserApiResponse(201, "Acount Deletion Sucessful", "api/users/allUsers/dashboard")
         : new UserApiResponse(402, "Account Not Registered", "api/users/allUsers/dashboard");
@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public UserApiResponse updateUser(Integer userId, UserDTO userDTO) {
+  public UserApiResponse updateUser(Long userId, UserDTO userDTO) {
     return userDao.findUserById(userId)
         .map(user -> {
           Optional.ofNullable(userDTO.getRole())
