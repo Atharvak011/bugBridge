@@ -25,7 +25,7 @@ public class BugController {
     this.bugService = bugService;
   }
 
-  // cretae a new Bug
+  // cretae a new Bug -- // --DONE
   @PostMapping("/create")
   public ResponseEntity<BugApiResponse> createBug(@RequestBody BugDTO request) {
     System.out.println(request);
@@ -37,6 +37,7 @@ public class BugController {
     return ResponseEntity.ok(createdBugResponse);
   }
 
+  // List a/all new Bug -- // --DONE
   @GetMapping("/allBugs")
   public ResponseEntity<BugApiResponse> getAllBugs(
       @RequestParam(name = "user_id", required = false) Long id) {
@@ -49,9 +50,13 @@ public class BugController {
   }
 
   // bug by bug_id
-  // @GetMapping(value = "/bugs/{id}")
-  // public ResponseEntity getBugById(@PathVariable Long id) {
-  // return new ResponseEntity(bugRepository.findById(id), HttpStatus.OK);
-  // }
+  @GetMapping(value = "/{id}")
+  public ResponseEntity<BugApiResponse> getBugById(@PathVariable Long id) {
+    if (id != null) {
+      BugApiResponse response = bugService.findBugById(id);
+      return ResponseEntity.ok(response);
+    }
+    return ResponseEntity.ok(new BugApiResponse(403, "Id Not provided", "/api/bugs"));
+  }
 
 }

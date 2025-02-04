@@ -1,6 +1,7 @@
 package com.cdac.bugbridge.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,12 @@ public class BugDAOImpl implements BugDAO {
   @Override
   public List<Bug> findAll() {
     return bugRepository.findAll();
+  }
+
+  @Override
+  public Optional<Bug> findBugById(Long id) {
+    Optional<Bug> bug = bugRepository.findById(id);
+    return bug;
   }
 
 }

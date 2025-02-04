@@ -10,6 +10,7 @@ import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.cdac.bugbridge.dao.BugDAO;
@@ -24,6 +25,7 @@ import com.cdac.bugbridge.response.BugApiResponse;
 import com.cdac.bugbridge.util.BugPriority;
 import com.cdac.bugbridge.util.BugStatus;
 
+import jakarta.persistence.TableGenerator;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -96,6 +98,18 @@ public class BugServiceImpl implements BugService {
         .collect(Collectors.toList());
 
     return new BugApiResponse(200, "", "/api/bugs", bugDTOList);
+  }
+
+  @Override
+  @Transactional
+  public BugApiResponse findBugById(Long id) {
+    // Bug bug = bugDAO.findBugById(id).ifPresent(modelMapper.map(bug,
+    // BugDTO.class));
+    BugDTO bugDTO = bugDAO.findBugById(id).map(bug -> modelMapper.map(bug, BugDTO.class))
+        .orElse(null);
+    return bugDTO != null ? new BugApiResponse(200, "Not in Db", "/api/bugs", bugDTO)
+        : new BugApiResponse(200, "Found", "/api/bugs", bugDTO);
+
   }
 
 }
