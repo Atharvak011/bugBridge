@@ -1,14 +1,20 @@
 package com.cdac.bugbridge.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserDTO {
 
-    private Integer id;
+    private Long id;
+
+    @Pattern(regexp = "^[a-zA-Z ]{3,50}$", message = "Name must contain only letters and spaces, with 3-50 characters.")
     private String name;
+
+    @Email(message = "Email should be valid.")
     private String email;
+
     private String role;
 
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&]).{8,20}$", message = "Password must be 8-20 characters long, contain at least one uppercase letter,"
@@ -27,7 +33,7 @@ public class UserDTO {
     }
 
     // Constructor with fields
-    public UserDTO(Integer id, String name, String email, String role, String password) {
+    public UserDTO(Long id, String name, String email, String role, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -36,7 +42,7 @@ public class UserDTO {
     }
 
     // Getters and Setters
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

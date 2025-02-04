@@ -1,10 +1,12 @@
 package com.cdac.bugbridge.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.cdac.bugbridge.util.UserRole;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "users")
@@ -15,7 +17,8 @@ public class User {
   private Integer id;
 
   @Column(name = "name", nullable = false)
-  @Pattern(regexp = "^[a-zA-Z ]{3,50}$", message = "Name must contain only letters and spaces, with 3-50 characters.")
+  // @Pattern(regexp = "^[a-zA-Z ]{3,50}$", message = "Name must contain only
+  // letters and spaces, with 3-50 characters.")
   private String name;
 
   @Column(name = "email", unique = true, nullable = false)
@@ -28,6 +31,32 @@ public class User {
 
   @Column(name = "password", nullable = false, length = 60)
   private String password;
+
+  // Relations
+  // @OneToMany(mappedBy = "assignedTo")
+  // private List<Bug> assignedBugs; // Bugs assigned to this developer
+
+  // @OneToMany(mappedBy = "reportedBy")
+  // private List<Bug> reportedBugs; // Bugs reported by this tester
+
+  // @OneToMany(mappedBy = "tester")
+  // private List<BugAssignment> bugAssignments; // Bugs assigned by this tester
+
+  // @OneToMany(mappedBy = "bug", cascade = CascadeType.ALL, orphanRemoval = true)
+  // private List<BugAssignment> bugAssignments;
+
+  // Relations
+  @OneToMany(mappedBy = "assignedTo", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Bug> assignedBugs = new ArrayList<>();
+
+  @OneToMany(mappedBy = "reportedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Bug> reportedBugs = new ArrayList<>();
+
+  @OneToMany(mappedBy = "tester", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<BugAssignment> assignedBugAssignments = new ArrayList<>();
+
+  @OneToMany(mappedBy = "developer", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<BugAssignment> receivedBugAssignments = new ArrayList<>();
 
   // Default Constructor
   public User() {

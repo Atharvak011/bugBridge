@@ -4,8 +4,6 @@ import com.cdac.bugbridge.dto.UserDTO;
 import com.cdac.bugbridge.exception.UserException;
 import com.cdac.bugbridge.response.UserApiResponse;
 
-
-
 public interface UserService {
 
   // Add new user (registration) based on developer and tester roles, cannot add
@@ -13,7 +11,7 @@ public interface UserService {
   void addUser(UserDTO userDTO) throws UserException.UserAlreadyExistsException;
 
   // finding a user by userId -- DONE
-  UserApiResponse findUserById(Integer userId);
+  UserApiResponse findUserById(Long userId);
 
   // for login authentication
   // Only Developer and Tester roles allowed
@@ -26,7 +24,7 @@ public interface UserService {
   void deleteUserByEmail(String emailId); // Only admin can delete
 
   // Delete user, only admin can delete
-  UserApiResponse deleteUserById(Integer userId); // Only admin can delete
+  UserApiResponse deleteUserById(Long userId); // Only admin can delete
 
   // List of all testers
   UserApiResponse listByRole(String role); // Return a list of testers
@@ -35,6 +33,6 @@ public interface UserService {
   UserApiResponse listAllUsers();
 
   // Changing details of user including password, email, role -- DONE
-  UserApiResponse updateUser(Integer userId, UserDTO userDTO);
+  UserApiResponse updateUser(Long userId, UserDTO userDTO);
 
 }

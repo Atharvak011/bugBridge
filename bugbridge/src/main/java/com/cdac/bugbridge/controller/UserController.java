@@ -51,7 +51,7 @@ public class UserController {
 
   // only admin can delete -- DONE
   @DeleteMapping("/admin/deleteUser/{userId}")
-  public ResponseEntity<UserApiResponse> deleteUser(@PathVariable("userId") Integer userId) {
+  public ResponseEntity<UserApiResponse> deleteUser(@PathVariable("userId") Long userId) {
     try {
       UserApiResponse response = userService.deleteUserById(userId);
       return ResponseEntity.ok(response);
@@ -62,7 +62,7 @@ public class UserController {
 
   // want only admin role to access this api -- DONE
   @GetMapping("/singleUserById/{userId}")
-  public ResponseEntity<UserApiResponse> getOneUser(@PathVariable Integer userId) {
+  public ResponseEntity<UserApiResponse> getOneUser(@PathVariable Long userId) {
     UserApiResponse userApiResponse = userService.findUserById(userId);
     return ResponseEntity.ok(userApiResponse);
   }

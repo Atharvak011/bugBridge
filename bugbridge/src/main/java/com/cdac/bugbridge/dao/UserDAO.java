@@ -15,27 +15,15 @@ public interface UserDAO {
   Optional<User> findUserByEmail(String emailID);
 
   // finding user by id --DONE
-  Optional<User> findUserById(Integer userId);
-
-  // Delete a user by emailId (only admin can delete)
-  int deleteUserByEmail(String emailId); // Only admin can delete
+  Optional<User> findUserById(Long userId);
 
   // Delete a user by userId (only admin can delete)
-  int deleteUserById(Integer userId); // Only admin can delete
-
-  // List all testers
-  List<User> listTesters(); // Return a list of testers
-
-  // List all developers
-  List<User> listDevelopers(); // Return a list of developers
-
-  // List both developers and testers
-  List<User> listDevelopersAndTesters(); // Return a combined list of developers and testers
+  int deleteUserById(Long userId); // Only admin can delete
 
   // List all users (accessible only to admin) -- DONE
   List<User> listAllUsers();
 
   // Update user details (password, newEmail, role)
-  int updateUser(Integer uniqueId, User userDetails); // Admin or specific users can update details
+  int updateUser(Long uniqueId, User userDetails); // Admin or specific users can update details
 
 }

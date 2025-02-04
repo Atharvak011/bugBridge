@@ -1,38 +1,42 @@
 package com.cdac.bugbridge.response;
 
-import com.cdac.bugbridge.dto.UserResponse;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import com.cdac.bugbridge.dto.BugDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "timestamp", "status", "message", "path" })
-public class UserApiResponse {
-
+public class BugApiResponse {
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime timestamp;
   private int status;
   private String message;
   private String path;
-  private UserResponse userResponse;
-  private List<UserResponse> userList;
+  private BugDTO bugDTO;
+  private List<BugDTO> bugList;
 
   // Single constructor for all cases
-  public UserApiResponse(int status, String message, String path, UserResponse userResponse,
-      List<UserResponse> userList) {
+  public BugApiResponse(int status, String message, String path, List<BugDTO> bugList) {
     this.timestamp = LocalDateTime.now();
     this.status = status;
     this.message = message;
     this.path = path;
-    this.userResponse = userResponse;
-    this.userList = userList;
+    this.bugList = bugList;
   }
 
-  // ctor for authentication
-  public UserApiResponse(int status, String message, String path) {
+  public BugApiResponse(int status, String message, String path, BugDTO bugDTO) {
+    this.timestamp = LocalDateTime.now();
+    this.status = status;
+    this.message = message;
+    this.path = path;
+    this.bugDTO = bugDTO;
+  }
+
+  public BugApiResponse(int status, String message, String path) {
     this.timestamp = LocalDateTime.now();
     this.status = status;
     this.message = message;
@@ -72,20 +76,19 @@ public class UserApiResponse {
     this.path = path;
   }
 
-  public UserResponse getData() {
-    return userResponse;
+  public BugDTO getBugDTO() {
+    return bugDTO;
   }
 
-  public void setData(UserResponse userResponse) {
-    this.userResponse = userResponse;
+  public void setBugDTO(BugDTO bugDTO) {
+    this.bugDTO = bugDTO;
   }
 
-  public List<UserResponse> getUserList() {
-    return userList;
+  public List<BugDTO> getBugList() {
+    return bugList;
   }
 
-  public void setUserList(List<UserResponse> userList) {
-    this.userList = userList;
+  public void setBugList(List<BugDTO> bugList) {
+    this.bugList = bugList;
   }
-
 }
