@@ -13,7 +13,7 @@ public class BugAssignment {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "tester_id", nullable = false)
   private User tester; // Tester who assigned the bug
 

@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.cdac.bugbridge.dto.BugDTO;
 import com.cdac.bugbridge.models.Bug;
 import com.cdac.bugbridge.repository.BugRepository;
 
@@ -26,7 +25,6 @@ public class BugDAOImpl implements BugDAO {
 
   @Override
   public List<Bug> findByAssignedToId(Long id) {
-
     List<Bug> list = bugRepository.findByReportedById(id);
     list.forEach(System.out::println);
     return list;
@@ -41,6 +39,20 @@ public class BugDAOImpl implements BugDAO {
   public Optional<Bug> findBugById(Long id) {
     Optional<Bug> bug = bugRepository.findById(id);
     return bug;
+  }
+
+  @Override
+  public Optional<Bug> deleteBug(Long id) {
+    Optional<Bug> bug = bugRepository.findById(id);
+    if (bug.isPresent()) {
+      bugRepository.deleteById(id);
+    }
+    return bug;
+  }
+
+  @Override
+  public Bug updateBug(Bug bug) {
+    return bugRepository.save(bug);
   }
 
 }
