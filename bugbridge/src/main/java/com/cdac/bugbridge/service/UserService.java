@@ -2,6 +2,7 @@ package com.cdac.bugbridge.service;
 
 import com.cdac.bugbridge.dto.UserDTO;
 import com.cdac.bugbridge.exception.UserException;
+import com.cdac.bugbridge.models.User;
 import com.cdac.bugbridge.response.UserApiResponse;
 
 public interface UserService {
@@ -34,5 +35,9 @@ public interface UserService {
 
   // Changing details of user including password, email, role -- DONE
   UserApiResponse updateUser(Long userId, UserDTO userDTO);
+
+
+  // Omkar Modifing the Code
+
 
 }
