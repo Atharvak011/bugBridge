@@ -1,13 +1,12 @@
 package com.cdac.bugbridge.controller;
 
-<<<<<<< HEAD
-=======
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
->>>>>>> b99e0aee9fc3e80b01059835d1b9c8e28e5f0bb9
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,13 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cdac.bugbridge.dto.BugDTO;
-<<<<<<< HEAD
-=======
 import com.cdac.bugbridge.models.Bug;
 import com.cdac.bugbridge.models.BugAssignment;
 import com.cdac.bugbridge.models.User;
 import com.cdac.bugbridge.repository.UserRepository;
->>>>>>> b99e0aee9fc3e80b01059835d1b9c8e28e5f0bb9
 import com.cdac.bugbridge.response.BugApiResponse;
 import com.cdac.bugbridge.response.BugAssignmentApiResponse;
 import com.cdac.bugbridge.service.BugService;
