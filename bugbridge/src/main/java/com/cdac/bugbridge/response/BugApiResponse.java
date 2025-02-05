@@ -43,6 +43,10 @@ public class BugApiResponse {
     this.path = path;
   }
 
+  public BugApiResponse() {
+    //TODO Auto-generated constructor stub
+  }
+
   // Getters and setters
   public LocalDateTime getTimestamp() {
     return timestamp;
@@ -91,4 +95,26 @@ public class BugApiResponse {
   public void setBugList(List<BugDTO> bugList) {
     this.bugList = bugList;
   }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("BugApiResponse { ")
+        .append("timestamp='").append(timestamp).append('\'')
+        .append(", status=").append(status)
+        .append(", message='").append(message).append('\'')
+        .append(", path='").append(path).append('\'');
+
+    if (bugDTO != null) {
+      sb.append(", bugDTO=").append(bugDTO);
+    }
+
+    if (bugList != null && !bugList.isEmpty()) {
+      sb.append(", bugList=").append(bugList);
+    }
+
+    sb.append(" }");
+    return sb.toString();
+  }
+
 }

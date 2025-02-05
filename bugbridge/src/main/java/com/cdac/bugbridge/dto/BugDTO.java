@@ -1,7 +1,5 @@
 package com.cdac.bugbridge.dto;
 
-import com.cdac.bugbridge.util.BugPriority;
-import com.cdac.bugbridge.util.BugStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.validation.constraints.NotNull;
@@ -19,14 +17,14 @@ public class BugDTO {
   private String description;
 
   @NotNull(message = "Priority is required")
-  private BugPriority priority;
+  private String priority;
 
   @NotNull(message = "Reported by is required")
   private Long reportedBy;
   private Long assignedTo;
 
   @NotNull(message = "Status is required")
-  private BugStatus status;
+  private String status;
   private String resolutionReport;
   private Boolean isDeleted;
 
@@ -38,8 +36,8 @@ public class BugDTO {
   }
 
   public BugDTO(Long id, String description,
-      BugPriority priority, Long reportedBy,
-      Long assignedTo, BugStatus status,
+      String priority, Long reportedBy,
+      Long assignedTo, String status,
       String resolutionReport, Boolean isDeleted, LocalDate resolvedAt) {
     this.id = id;
     this.description = description;
@@ -77,11 +75,11 @@ public class BugDTO {
     this.description = description;
   }
 
-  public BugPriority getPriority() {
+  public String getPriority() {
     return priority;
   }
 
-  public void setPriority(BugPriority priority) {
+  public void setPriority(String priority) {
     this.priority = priority;
   }
 
@@ -101,11 +99,11 @@ public class BugDTO {
     this.assignedTo = assignedTo;
   }
 
-  public BugStatus getStatus() {
+  public String getStatus() {
     return status;
   }
 
-  public void setStatus(BugStatus status) {
+  public void setStatus(String status) {
     this.status = status;
   }
 
@@ -135,7 +133,7 @@ public class BugDTO {
 
   @Override
   public String toString() {
-    return "Bug{" +
+    return "BugDTO{" +
         "id=" + id +
         // ", version=" + version +
         ", dateReported=" + dateReported +

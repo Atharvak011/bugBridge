@@ -4,6 +4,7 @@ import com.cdac.bugbridge.util.BugPriority;
 import com.cdac.bugbridge.util.BugStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 // import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.persistence.*;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-// @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Table(name = "bugs")
 public class Bug {
 
@@ -74,6 +75,10 @@ public class Bug {
   }
 
   // Getters and Setters
+
+  public Bug(User developer) {
+    //TODO Auto-generated constructor stub
+  }
 
   public Long getId() {
     return id;

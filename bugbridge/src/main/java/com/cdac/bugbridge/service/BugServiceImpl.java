@@ -1,16 +1,11 @@
 package com.cdac.bugbridge.service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.cdac.bugbridge.dao.BugDAO;
@@ -25,7 +20,6 @@ import com.cdac.bugbridge.response.BugApiResponse;
 import com.cdac.bugbridge.util.BugPriority;
 import com.cdac.bugbridge.util.BugStatus;
 
-import jakarta.persistence.TableGenerator;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -43,7 +37,7 @@ public class BugServiceImpl implements BugService {
 
   private final ModelMapper modelMapper;
 
-  @Autowired
+  // @Autowired
   public BugServiceImpl(BugDAO bugDAO, ModelMapper modelMapper) {
     this.modelMapper = modelMapper;
     this.bugDAO = bugDAO;
@@ -51,35 +45,35 @@ public class BugServiceImpl implements BugService {
 
   @Override
   @Transactional
-  public BugApiResponse createBug(Long reporterId, Long developerId, String description, BugPriority priority) {
+  public BugApiResponse createBug(Long reporterId, Long developerId, String description, String priority) {
     // Fetch reporter (tester)
     User reporter = userRepository.findById(reporterId)
         .orElseThrow(() -> new RuntimeException("Reporter not found"));
 
     User developer = null;
-    if (developerId != null) { // ✅ Only fetch if assignedTo is not null
+    if (developerId != null) {
       developer = userRepository.findById(developerId)
           .orElseThrow(() -> new RuntimeException("Developer not found with ID: " + developerId));
     }
     // Create bug
-    Bug bug = new Bug(description, priority, reporter, developer, null);
-
-    // // Automatically create a BugAssignment entry
-    // BugAssignment assignment = new BugAssignment(reporter, bug, developer);
-    // bugAssignmentRepository.save(assignment);
-
+    Bug bug = new Bug(description, BugPriority.fromString(priority), reporter, developer, null);
     Bug savedBug = bugDAO.createBug(bug);
+
+    if (savedBug == null || savedBug.getId() == null) { // Check if Bug is really saved
+      return new BugApiResponse(500, "Bug not saved", "/api/bugs");
+    }
     BugDTO bugDTO = modelMapper.map(savedBug, BugDTO.class);
-    return new BugApiResponse((savedBug != null ? 201 : 403), (savedBug != null ? "Created" : "Error"), "/api/bugs/",
-        bugDTO);
+    return new BugApiResponse(201, "Created", "/api/bugs/", bugDTO);
   }
 
   @Override
   @Transactional
   public BugApiResponse findByAssignedToId(Long id) {
-    List<BugDTO> bugDTOList = bugDAO.findByAssignedToId(id).stream().map(bug -> modelMapper.map(bug, BugDTO.class))
+    List<BugDTO> bugDTOList = bugDAO.findByAssignedToId(id)
+        .stream()
+        .map(bug -> mapBugToDTO(bug))
         .collect(Collectors.toList());
-    return new BugApiResponse(200, "", "/api/bugs", bugDTOList);
+    return new BugApiResponse(200, "Bug by provided id: " + id, "/api/bugs", bugDTOList);
   }
 
   @Override
@@ -93,23 +87,118 @@ public class BugServiceImpl implements BugService {
     // Hibernate.initialize(bug.getAssignedTo());
     // });
 
-    List<BugDTO> bugDTOList = bugList.stream()
-        .map(bug -> modelMapper.map(bug, BugDTO.class))
+    List<BugDTO> bugDTOList = bugList
+        .stream()
+        .map(bug -> mapBugToDTO(bug))
         .collect(Collectors.toList());
 
-    return new BugApiResponse(200, "", "/api/bugs", bugDTOList);
+    return new BugApiResponse(200, "List of All bugs in Db", "/api/bugs", bugDTOList);
   }
 
   @Override
   @Transactional
   public BugApiResponse findBugById(Long id) {
-    // Bug bug = bugDAO.findBugById(id).ifPresent(modelMapper.map(bug,
-    // BugDTO.class));
-    BugDTO bugDTO = bugDAO.findBugById(id).map(bug -> modelMapper.map(bug, BugDTO.class))
+    BugDTO bugDTO = bugDAO.findBugById(id).map(bug -> mapBugToDTO(bug))
         .orElse(null);
-    return bugDTO != null ? new BugApiResponse(200, "Not in Db", "/api/bugs", bugDTO)
-        : new BugApiResponse(200, "Found", "/api/bugs", bugDTO);
+    return bugDTO != null ? new BugApiResponse(200, "Found Bug id: " + id, "/api/bugs", bugDTO)
+        : new BugApiResponse(200, "Bug Not Found", "/api/bugs", bugDTO);
 
+  }
+
+  @Override
+  @Transactional
+  public BugApiResponse deleteBug(Long id) {
+    BugDTO bugDTO = bugDAO.deleteBug(id).map(bug -> mapBugToDTO(bug))
+        .orElse(null);
+    return bugDTO != null ? new BugApiResponse(200, "Bug Deleted Success id: " + id, "/api/bugs", bugDTO)
+        : new BugApiResponse(200, "Bug Not Found id: " + id, "/api/bugs", bugDTO);
+
+  }
+
+  @Override
+  @Transactional
+  public BugApiResponse updateBug(BugDTO bugDTO, Long id) {
+    // Retrieve bug from database
+    Optional<Bug> existingBugOptional = bugRepository.findById(id);
+    if (!existingBugOptional.isPresent()) {
+      return new BugApiResponse(404, "Bug Not Found", "/api/bugs/", bugDTO);
+    }
+
+    Bug existingBug = existingBugOptional.get();
+
+    // Keep track of the old assignedTo value to check for changes
+    User oldAssignedTo = existingBug.getAssignedTo();
+
+    // Update fields if the value is not null in the DTO
+    if (bugDTO.getDescription() != null) {
+      existingBug.setDescription(bugDTO.getDescription());
+    }
+    if (bugDTO.getPriority() != null) {
+      existingBug.setPriority(BugPriority.fromString(bugDTO.getPriority()));
+    }
+    if (bugDTO.getAssignedTo() != null) {
+      User developer = userRepository.findById(bugDTO.getAssignedTo()).orElse(null);
+      existingBug.setAssignedTo(developer);
+    }
+    if (bugDTO.getStatus() != null) {
+      existingBug.setStatus(BugStatus.fromString(bugDTO.getStatus()));
+    }
+    if (bugDTO.getResolutionReport() != null) {
+      existingBug.setResolutionReport(bugDTO.getResolutionReport());
+    }
+    if (bugDTO.getResolvedAt() != null) {
+      existingBug.setResolvedAt(bugDTO.getResolvedAt());
+    }
+    if (bugDTO.getIsDeleted() != null) {
+      existingBug.setIsDeleted(bugDTO.getIsDeleted());
+    }
+
+    // Save updated bug
+    Bug savedBug = bugDAO.updateBug(existingBug);
+
+    // Check if the assignedTo field was updated
+    if (oldAssignedTo == null || !oldAssignedTo.equals(savedBug.getAssignedTo())) {
+      // Automatically create a BugAssignment entry if the assignedTo has changed
+      User reporter = savedBug.getReportedBy(); // Assuming reportedBy is available
+      User developer = savedBug.getAssignedTo();
+      BugAssignment assignment = new BugAssignment(reporter, savedBug, developer);
+      assignment.setBug(savedBug);
+      bugAssignmentRepository.save(assignment);
+
+      // // Log the assignment
+      // System.out.println("******");
+      // System.out
+      // .println("ReportedBy: " + (savedBug.getReportedBy() != null ?
+      // savedBug.getReportedBy().getId() : "null"));
+      // System.out.println("******");
+      // System.out
+      // .println("AssignedTo: " + (savedBug.getAssignedTo() != null ?
+      // savedBug.getAssignedTo().getId() : "null"));
+      // System.out.println("******");
+    }
+
+    // Map saved bug to BugDTO for response
+    // BugDTO bugDTOresponse = modelMapper.map(savedBug, BugDTO.class);
+    BugDTO bugDTOresponse = mapBugToDTO(savedBug);
+
+    // Return response
+    return new BugApiResponse(200, "Bug Updated", "/api/bugs/", bugDTOresponse);
+  }
+
+  @Override
+  public BugDTO mapBugToDTO(Bug bug) {
+    BugDTO bugDTO = new BugDTO();
+    bugDTO.setId(bug.getId());
+    bugDTO.setDateReported(bug.getDateReported());
+    bugDTO.setDescription(bug.getDescription());
+    bugDTO.setPriority(bug.getPriority().toString());
+    bugDTO.setReportedBy(bug.getReportedBy() != null ? bug.getReportedBy().getId() : null);
+    bugDTO.setAssignedTo(bug.getAssignedTo() != null ? bug.getAssignedTo().getId() : null);
+    bugDTO.setStatus(bug.getStatus().toString());
+    bugDTO.setResolutionReport(bug.getResolutionReport());
+    bugDTO.setResolvedAt(bug.getResolvedAt());
+    bugDTO.setIsDeleted(bug.getIsDeleted());
+    return bugDTO;
   }
 
 }

@@ -1,11 +1,8 @@
 package com.cdac.bugbridge.repository;
 
-import com.cdac.bugbridge.dto.BugDTO;
 import com.cdac.bugbridge.models.Bug;
 import com.cdac.bugbridge.util.BugStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-
 import java.util.List;
 
 public interface BugRepository extends JpaRepository<Bug, Long> {

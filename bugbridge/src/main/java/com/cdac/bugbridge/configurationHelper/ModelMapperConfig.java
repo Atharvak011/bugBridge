@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.cdac.bugbridge.dto.BugDTO;
 import com.cdac.bugbridge.models.Bug;
-import com.cdac.bugbridge.models.User;
 
 @Configuration
 public class ModelMapperConfig {
@@ -15,7 +14,6 @@ public class ModelMapperConfig {
   public ModelMapper modelMapper() {
     ModelMapper modelMapper = new ModelMapper();
 
-    // Explicitly map User to User ID in BugDTO
     modelMapper.typeMap(Bug.class, BugDTO.class).addMappings(mapper -> {
       mapper.map(src -> src.getReportedBy().getId(), BugDTO::setReportedBy);
       mapper.map(src -> src.getAssignedTo() != null ? src.getAssignedTo().getId() : null, BugDTO::setAssignedTo);
