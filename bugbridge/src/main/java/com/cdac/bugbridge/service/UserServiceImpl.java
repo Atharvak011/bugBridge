@@ -4,7 +4,9 @@ import com.cdac.bugbridge.dao.UserDAO;
 import com.cdac.bugbridge.dto.UserDTO;
 import com.cdac.bugbridge.dto.UserResponse;
 import com.cdac.bugbridge.exception.UserException;
+import com.cdac.bugbridge.exception.UserException.UserNotFoundException;
 import com.cdac.bugbridge.models.User;
+import com.cdac.bugbridge.repository.UserRepository;
 import com.cdac.bugbridge.response.UserApiResponse;
 import com.cdac.bugbridge.util.UserRole;
 
@@ -141,5 +143,14 @@ public class UserServiceImpl implements UserService {
         .orElse(new UserApiResponse(404, "User Not Found", "api/users/profileInfo"));
 
   }
+
+  // Omkar Modifing the Code
+
+ 
+
+      
+
+  
+
 
 }

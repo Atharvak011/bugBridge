@@ -34,6 +34,29 @@ public class UserException extends  Exception{
         }
     }
 
+    // Omkar Modifiing the Code
+    
+        public static class AccessDeniedException extends UserException {
+            public AccessDeniedException(String message) {
+                super(message);
+            }
+        }
+       
+        
+         public static class InvalidUserCredentialsException extends UserException {
+            public InvalidUserCredentialsException(String message) {
+            super(message);
+            }
+        }
+        
+       
+        public static class UserNotFoundException extends RuntimeException {
+            public UserNotFoundException(String message) {
+                super(message);
+            }
+        }
+        
+    
 
 }
 

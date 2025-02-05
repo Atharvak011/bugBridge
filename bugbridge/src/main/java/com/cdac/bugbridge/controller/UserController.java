@@ -43,6 +43,33 @@ public class UserController {
         .ok(new UserApiResponse(200, "Login credentials Incorrect", "/api/login"));
   }
 
+
+    // @PostMapping("/authenticate")
+    // public ResponseEntity<UserApiResponse> authenticateUser(@RequestBody UserDTO userDTO) {
+    //     try {
+    //         boolean val = userService.findUserByEmail(userDTO);
+
+    //         if (val) {
+    //             return ResponseEntity.ok(new UserApiResponse(200, "Authentication Success", "/api/dashboard"));
+    //         } else {
+    //             // Throw custom exception for invalid user credentials
+    //             throw new UserException.InvalidUserCredentialsException("Login credentials incorrect");
+    //         }
+    //     } catch (UserException.InvalidUserCredentialsException ex) {
+    //         // Handle Invalid User Credentials Exception
+    //         return ResponseEntity.status(400).body(
+    //             new UserApiResponse(400, ex.getMessage(), "/api/login")
+    //         );
+    //     } catch (Exception ex) {
+    //         // Handle any other unexpected errors (e.g., database issues, server errors)
+    //         return ResponseEntity.status(500).body(
+    //             new UserApiResponse(500, "An unexpected error occurred. Please try again later.", "/api/login")
+    //         );
+    //     }
+    // }
+
+
+
   // update User details --DONE
   @PatchMapping("/updateUserDetails")
   public ResponseEntity<UserApiResponse> updateUserDetails(@RequestBody UserDTO userDTO) {
@@ -79,5 +106,4 @@ public class UserController {
   public ResponseEntity<UserApiResponse> getUsersByRole(@PathVariable("role") String role) {
     return ResponseEntity.ok(userService.listByRole(role));
   }
-
 }
