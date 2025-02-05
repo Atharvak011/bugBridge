@@ -36,6 +36,11 @@ public class UserServiceImpl implements UserService {
   // -- DONE
   @Override
   public void addUser(UserDTO userDTO) throws UserException.UserAlreadyExistsException {
+    // Check if the email already exists
+    Optional<User> existingUser = userDao.findUserByEmail(userDTO.getEmail());
+    if (existingUser.isPresent()) {
+      throw new UserException.UserAlreadyExistsException("User with email " + userDTO.getEmail() + " already exists!");
+    }
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     String hashedPassword = bCryptPasswordEncoder.encode(userDTO.getPassword());
     User entityUser = new User();
@@ -145,12 +150,5 @@ public class UserServiceImpl implements UserService {
   }
 
   // Omkar Modifing the Code
-
- 
-
-      
-
-  
-
 
 }
