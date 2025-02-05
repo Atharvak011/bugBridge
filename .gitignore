@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 .vscode/
 .idea/
-=======
 .gitignore
->>>>>>> upstream/main
 .DS_Store
 .vscode
