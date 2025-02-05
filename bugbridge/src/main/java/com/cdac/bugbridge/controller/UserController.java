@@ -2,11 +2,16 @@ package com.cdac.bugbridge.controller;
 
 import com.cdac.bugbridge.exception.UserException;
 import com.cdac.bugbridge.service.UserService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.cdac.bugbridge.dto.UserDTO;
 import com.cdac.bugbridge.dto.UserResponse;
 import com.cdac.bugbridge.response.UserApiResponse;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @RestController
@@ -19,22 +24,16 @@ public class UserController {
     this.userService = userService;
   }
 
-  // Registering a new User -- DONE
   @PostMapping("/register")
-  public ResponseEntity<UserApiResponse> addUser(@RequestBody UserDTO userDTO) {
-    try {
-      userService.addUser(userDTO);
-      UserResponse userResponse = new UserResponse(userDTO.getName(), userDTO.getEmail(),
-          userDTO.getRole());
-      return ResponseEntity.ok(new UserApiResponse(200, "Success", "/api/login", userResponse, null));
-    } catch (UserException.UserAlreadyExistsException ex) {
-      return ResponseEntity.status(400).body(new UserApiResponse(400, ex.getMessage(), "/api/register", null, null));
-    }
+  public ResponseEntity<UserApiResponse> addUser(@Valid @RequestBody UserDTO userDTO) {
+    userService.addUser(userDTO);
+    UserResponse userResponse = new UserResponse(userDTO.getName(), userDTO.getEmail(), userDTO.getRole());
+    return ResponseEntity.ok(new UserApiResponse(200, "Success", "/api/users/login", userResponse, null));
   }
 
   // login Validation -- DONE
   @PostMapping("/authenticate")
-  public ResponseEntity<UserApiResponse> authenticateUser(@RequestBody UserDTO userDTO) {
+  public ResponseEntity<UserApiResponse> authenticateUser(@Valid @RequestBody UserDTO userDTO) {
     boolean val = userService.findUserByEmail(userDTO);
     if (val) {
       return ResponseEntity.ok(new UserApiResponse(200, "Authentication Success", "/api/dashboard"));
@@ -42,33 +41,6 @@ public class UserController {
     return ResponseEntity
         .ok(new UserApiResponse(200, "Login credentials Incorrect", "/api/login"));
   }
-
-
-    // @PostMapping("/authenticate")
-    // public ResponseEntity<UserApiResponse> authenticateUser(@RequestBody UserDTO userDTO) {
-    //     try {
-    //         boolean val = userService.findUserByEmail(userDTO);
-
-    //         if (val) {
-    //             return ResponseEntity.ok(new UserApiResponse(200, "Authentication Success", "/api/dashboard"));
-    //         } else {
-    //             // Throw custom exception for invalid user credentials
-    //             throw new UserException.InvalidUserCredentialsException("Login credentials incorrect");
-    //         }
-    //     } catch (UserException.InvalidUserCredentialsException ex) {
-    //         // Handle Invalid User Credentials Exception
-    //         return ResponseEntity.status(400).body(
-    //             new UserApiResponse(400, ex.getMessage(), "/api/login")
-    //         );
-    //     } catch (Exception ex) {
-    //         // Handle any other unexpected errors (e.g., database issues, server errors)
-    //         return ResponseEntity.status(500).body(
-    //             new UserApiResponse(500, "An unexpected error occurred. Please try again later.", "/api/login")
-    //         );
-    //     }
-    // }
-
-
 
   // update User details --DONE
   @PatchMapping("/updateUserDetails")
