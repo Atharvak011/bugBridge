@@ -70,6 +70,9 @@ import Profile from "./Pages/Profile";
 import Dashboard from "./Pages/Dashboard";
 import Register from "./Pages/Register";
 import Sidebar from "./components/Sidebar";
+import AddBug from "./Pages/AddBug";
+import AllBugs from "./Pages/AllBugs";
+
 
 // PrivateRoute component (Modified to remove `loading`)
 const PrivateRoute = ({ children }) => {
@@ -152,6 +155,26 @@ const App = () => {
               </Layout>
             }
           />
+
+          {/* Protected Routes (Wrapped with Layout) */ }
+          <Route
+            path="/addBug"
+            element={
+              <Layout>
+                <AddBug />
+              </Layout>
+            }
+          />
+          {/* Protected Routes (Wrapped with Layout) */ }
+          <Route
+            path="/allBugs"
+            element={
+              <Layout>
+                <AllBugs />
+              </Layout>
+            }
+          />
+
         </Routes>
       </UserProvider>
     </Router>
@@ -160,3 +183,4 @@ const App = () => {
 export default App;
 {/* <Route path="/dashboard" element={ <PrivateRoute><Dashboard /></PrivateRoute> } /> */ }
 {/* <Route path="/profile" element={ <PrivateRoute><Profile /></PrivateRoute> } /> */ }
+
