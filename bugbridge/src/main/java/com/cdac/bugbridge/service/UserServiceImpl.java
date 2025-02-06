@@ -4,9 +4,7 @@ import com.cdac.bugbridge.dao.UserDAO;
 import com.cdac.bugbridge.dto.UserDTO;
 import com.cdac.bugbridge.dto.UserResponse;
 import com.cdac.bugbridge.exception.UserException;
-import com.cdac.bugbridge.exception.UserException.UserNotFoundException;
 import com.cdac.bugbridge.models.User;
-import com.cdac.bugbridge.repository.UserRepository;
 import com.cdac.bugbridge.response.UserApiResponse;
 import com.cdac.bugbridge.util.UserRole;
 
@@ -18,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -50,7 +47,6 @@ public class UserServiceImpl implements UserService {
     userDao.addUser(entityUser);
   }
 
-  // -- DONE
   @Override
   public UserApiResponse findUserById(Long userId) {
     UserResponse responseUser = new UserResponse();
@@ -63,7 +59,6 @@ public class UserServiceImpl implements UserService {
     return new UserApiResponse(200, "User Not found", "/api/users/dashboard", null, null);
   }
 
-  // -- DONE for login check
   @Override
   public UserResponse validUserByEmail(UserDTO userDTO) {
     String emailId = userDTO.getEmail();
@@ -150,7 +145,5 @@ public class UserServiceImpl implements UserService {
         .orElse(new UserApiResponse(404, "User Not Found", "api/users/profileInfo"));
 
   }
-
-  // Omkar Modifing the Code
 
 }

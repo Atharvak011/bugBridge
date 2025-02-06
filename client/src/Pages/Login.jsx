@@ -29,14 +29,14 @@ const Login = () => {
 
     try {
       const res = await axios.post('http://localhost:8080/api/users/authenticate', credentials);
-      if (res.data.message === 'Authentication Success') {
-        const { token, user } = res.data;
+      if (res.data.message === 'Authentication Success' && res.status === 200) {
+        // const { token, user } = res.data;
 
         // Store token & user data
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
+        // localStorage.setItem('token', token);
+        // localStorage.setItem('user', JSON.stringify(user));
 
-        updateUser(user); // Update context with user data
+        // updateUser(user); // Update context with user data
         navigate('/dashboard'); // Redirect to dashboard
       } else {
         setError('Invalid credentials, please try again.');

@@ -22,7 +22,7 @@ const Sidebar = () => {
       </button>
 
       <ul className="space-y-4">
-        <li className={ `flex items-center gap-2 p-3 rounded ${location.pathname === "/" ? "bg-gray-700" : ""}` } onClick={ () => navigate("/") }>
+        <li className={ `flex items-center gap-2 p-3 rounded ${location.pathname === "/dashboard" ? "bg-gray-700" : ""}` } onClick={ () => navigate("/") }>
           <Home className="w-5 h-5" />
           { !collapsed && <span>Dashboard</span> }
         </li>
@@ -32,14 +32,14 @@ const Sidebar = () => {
         </li>
         <li className={ `flex items-center gap-2 p-3 rounded ${location.pathname === "/bugs" ? "bg-gray-700" : ""}` } onClick={ () => navigate("/bugs") }>
           <Bug className="w-5 h-5" />
-          { !collapsed && <span>Bugs</span> }
+          { !collapsed && <span>Report Bugs</span> }
         </li>
-        <li>
+        {/* <li>
           <button onClick={ handleLogout } className="w-full flex items-center gap-2 text-left py-2 px-3 bg-red-500 rounded">
             <LogOut className="w-5 h-5" />
             { !collapsed && <span>Logout</span> }
           </button>
-        </li>
+        </li> */}
       </ul>
     </div>
   );
