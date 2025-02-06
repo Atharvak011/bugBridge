@@ -26,4 +26,6 @@ public interface BugService {
 
   BugDTO mapBugToDTO(Bug bug);
 
+  BugApiResponse softDeleteBug(Long id);
+
 }

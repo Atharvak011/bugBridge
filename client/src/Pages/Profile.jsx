@@ -1,6 +1,5 @@
-
 import React, { useState, useContext } from 'react';
-import { UserContext } from "../context/UserContext"
+import { UserContext } from "../context/UserContext";
 import axios from 'axios';
 
 const Profile = () => {
@@ -11,7 +10,9 @@ const Profile = () => {
     email: user?.email || '',
     role: user?.role || '',
   });
+
   const [isEditing, setIsEditing] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Handle form changes
   const handleChange = (e) => {
@@ -21,20 +22,36 @@ const Profile = () => {
   // Handle form submission (API Call)
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Prevent submission if nothing has changed
+    if (
+      formData.name === user.name &&
+      formData.email === user.email
+    ) {
+      alert("No changes detected.");
+      setIsEditing(false);
+      return;
+    }
+
+    setIsSubmitting(true);
+
     try {
       const res = await axios.patch(
         'http://localhost:8080/api/users/updateUserDetails',
-        formData
-        // EDIT HERE UNCOMMENT THIS CODE  ---------------------------------------------------------------
-        // { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },}
+        formData,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        }
       );
 
       updateUser(res.data); // Update context with new user data
-      setIsEditing(false);
       alert('Profile updated successfully!');
+      setIsEditing(false);
     } catch (error) {
       console.error('Error updating profile:', error);
-      alert('Failed to update profile.');
+      alert(error.response?.data?.message || 'Failed to update profile.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -71,7 +88,7 @@ const Profile = () => {
           />
         </div>
 
-        {/* Role Field */ }
+        {/* Role Field (Disabled) */ }
         <div className="mb-4">
           <label className="block text-sm font-medium">Role</label>
           <input
@@ -83,7 +100,7 @@ const Profile = () => {
           />
         </div>
 
-        {/* Edit Button */ }
+        {/* Edit / Save Buttons */ }
         { !isEditing ? (
           <button
             type="button"
@@ -96,9 +113,10 @@ const Profile = () => {
           <>
             <button
               type="submit"
-              className="px-4 py-2 bg-green-500 text-white rounded mr-2"
+              disabled={ isSubmitting }
+              className={ `px-4 py-2 ${isSubmitting ? "bg-gray-400" : "bg-green-500"} text-white rounded mr-2` }
             >
-              Save Changes
+              { isSubmitting ? "Saving..." : "Save Changes" }
             </button>
             <button
               type="button"
@@ -115,4 +133,3 @@ const Profile = () => {
 };
 
 export default Profile;
-

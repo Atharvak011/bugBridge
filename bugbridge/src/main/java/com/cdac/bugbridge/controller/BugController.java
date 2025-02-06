@@ -3,9 +3,9 @@ package com.cdac.bugbridge.controller;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import com.cdac.bugbridge.dto.BugDTO;
 import com.cdac.bugbridge.models.Bug;
@@ -62,8 +62,18 @@ public class BugController {
     return ResponseEntity.ok(new BugApiResponse(403, "GET Id Not provided", "/api/bugs"));
   }
 
-  // delete a bug
-  @DeleteMapping(value = "/{id}")
+  @PutMapping("/delete/{id}")
+  public ResponseEntity<BugApiResponse> softDeleteBug(@PathVariable Long id) {
+    if (id == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+          .body(new BugApiResponse(400, "Bug ID must be provided", "/api/bugs/delete"));
+    }
+    BugApiResponse response = bugService.softDeleteBug(id);
+    return ResponseEntity.ok(response);
+  }
+
+  // delete a bug // ADMIN
+  @DeleteMapping("/{id}")
   public ResponseEntity<BugApiResponse> deleteBug(@PathVariable Long id) {
     if (id != null) {
       BugApiResponse response = bugService.deleteBug(id);
@@ -72,7 +82,7 @@ public class BugController {
     return ResponseEntity.ok(new BugApiResponse(403, "DELETE Id Not provided", "/api/bugs"));
   }
 
-  @PatchMapping(value = "/{id}")
+  @PatchMapping("/{id}")
   public ResponseEntity<BugApiResponse> updateBug(@RequestBody BugDTO bugDTO, @PathVariable Long id) {
     BugApiResponse response = bugService.updateBug(bugDTO, id);
     return ResponseEntity.ok(response);

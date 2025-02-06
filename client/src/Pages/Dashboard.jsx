@@ -10,11 +10,11 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
 
   const fetchBugs = async () => {
-    // if (!user) return;
+    if (!user) return;
     setLoading(true);
     try {
-      // const response = await axios.get(`http://localhost:8080/api/bugs/allBugs?user_id=${user.id}`);
-      const response = await axios.get(`http://localhost:8080/api/bugs/allBugs?user_id=14`);
+      const response = await axios.get(`http://localhost:8080/api/bugs/allBugs?user_id=${user.id}`);
+      // const response = await axios.get(`http://localhost:8080/api/bugs/allBugs?user_id=14`);
       setBugs(response.data.bugList || []);
       setError(null);
     } catch (err) {
