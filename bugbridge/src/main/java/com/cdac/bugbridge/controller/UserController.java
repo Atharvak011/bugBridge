@@ -1,6 +1,5 @@
 package com.cdac.bugbridge.controller;
 
-import com.cdac.bugbridge.exception.UserException;
 import com.cdac.bugbridge.service.UserService;
 
 import jakarta.validation.Valid;
@@ -11,7 +10,6 @@ import com.cdac.bugbridge.dto.UserDTO;
 import com.cdac.bugbridge.dto.UserResponse;
 import com.cdac.bugbridge.response.UserApiResponse;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @RestController
@@ -44,7 +42,7 @@ public class UserController {
 
   // update User details --DONE
   @PatchMapping("/updateUserDetails")
-  public ResponseEntity<UserApiResponse> updateUserDetails(@RequestBody UserDTO userDTO) {
+  public ResponseEntity<UserApiResponse> updateUserDetails(@Valid @RequestBody UserDTO userDTO) {
     return ResponseEntity.ok(userService.updateUser(userDTO.getId(), userDTO));
   }
 

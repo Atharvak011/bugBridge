@@ -69,6 +69,7 @@ import Login from "./Pages/Login";
 import Profile from "./Pages/Profile";
 import Dashboard from "./Pages/Dashboard";
 import Register from "./Pages/Register";
+import Sidebar from "./components/Sidebar";
 
 // PrivateRoute component (Modified to remove `loading`)
 const PrivateRoute = ({ children }) => {
@@ -110,22 +111,52 @@ const PrivateRoute = ({ children }) => {
 //     </UserProvider>
 //   );
 // };
+// ---------------------------------------------------------------------
+// Layout Component that wraps protected pages
+const Layout = ({ children }) => {
+  return (
+    <div className="flex">
+      <Sidebar /> {/* Sidebar on the left */ }
+      <div className="flex-1">
+        <Header /> {/* Header at the top */ }
+        <main className="p-6">{ children }</main>
+      </div>
+    </div>
+  );
+};
 
 
 const App = () => {
   return (
-    <Router> {/* Router must wrap UserProvider */ }
+    <Router>
       <UserProvider>
-        <Header /> {/* Ensure Header is always visible */ }
         <Routes>
+          {/* Public Routes (No Header/Sidebar) */ }
           <Route path="/login" element={ <Login /> } />
           <Route path="/register" element={ <Register /> } />
-          <Route path="/dashboard" element={ <PrivateRoute><Dashboard /></PrivateRoute> } />
-          <Route path="/profile" element={ <PrivateRoute><Profile /></PrivateRoute> } />
+
+          {/* Protected Routes (Wrapped with Layout) */ }
+          <Route
+            path="/dashboard"
+            element={
+              <Layout>
+                <Dashboard />
+              </Layout>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <Layout>
+                <Profile />
+              </Layout>
+            }
+          />
         </Routes>
       </UserProvider>
     </Router>
   );
 };
-
 export default App;
+{/* <Route path="/dashboard" element={ <PrivateRoute><Dashboard /></PrivateRoute> } /> */ }
+{/* <Route path="/profile" element={ <PrivateRoute><Profile /></PrivateRoute> } /> */ }

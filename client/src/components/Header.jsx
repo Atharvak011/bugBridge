@@ -51,10 +51,15 @@ const Header = () => {
     navigate('/login'); // Redirect to login page
   };
 
+  // const handleDashboard = () => {
+  //   navigate('/dashboard');
+  // }
+
   return (
     <header className="bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-white px-6 py-4 flex justify-between items-center shadow-md">
       {/* Logo / Brand */ }
       <h1 className="text-xl font-bold">BugBridge</h1>
+      {/* Logout Button */ }
 
       {/* Navigation Icons */ }
       <div className="flex items-center space-x-6">
@@ -96,6 +101,7 @@ const Header = () => {
             </div>
           ) }
         </div>
+
 
         {/* Profile Button */ }
         <button

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "timestamp", "status", "message", "path", "bugAssignmentDTO" })
+@JsonPropertyOrder({ "timestamp", "status", "message", "path", "bugAssignmentDTO", "bugAssignment" })
 public class BugAssignmentApiResponse {
 
   private String timestamp; // You could use LocalDateTime as well
