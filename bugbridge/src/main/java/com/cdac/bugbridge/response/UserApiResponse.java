@@ -39,6 +39,14 @@ public class UserApiResponse {
     this.path = path;
   }
 
+  public UserApiResponse(int status, String message, String path, UserResponse userResponse) {
+    this.status = status;
+    this.message = message;
+    this.path = path;
+    this.userResponse = userResponse;
+
+  }
+
   // Getters and setters
   public LocalDateTime getTimestamp() {
     return timestamp;

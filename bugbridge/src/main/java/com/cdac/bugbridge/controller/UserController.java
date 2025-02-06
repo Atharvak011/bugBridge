@@ -34,12 +34,12 @@ public class UserController {
   // login Validation -- DONE
   @PostMapping("/authenticate")
   public ResponseEntity<UserApiResponse> authenticateUser(@Valid @RequestBody UserDTO userDTO) {
-    boolean val = userService.findUserByEmail(userDTO);
-    if (val) {
-      return ResponseEntity.ok(new UserApiResponse(200, "Authentication Success", "/api/dashboard"));
+    UserResponse response = userService.validUserByEmail(userDTO);
+    if (response.getIsPresent() != false) {
+      return ResponseEntity.ok(new UserApiResponse(200, "Authentication Success", "/api/dashboard", response));
     }
     return ResponseEntity
-        .ok(new UserApiResponse(200, "Login credentials Incorrect", "/api/login"));
+        .ok(new UserApiResponse(200, "Login credentials Incorrect", "/api/login", response));
   }
 
   // update User details --DONE

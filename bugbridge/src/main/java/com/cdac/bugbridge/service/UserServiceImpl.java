@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -64,17 +65,18 @@ public class UserServiceImpl implements UserService {
 
   // -- DONE for login check
   @Override
-  public boolean findUserByEmail(UserDTO userDTO) {
+  public UserResponse validUserByEmail(UserDTO userDTO) {
     String emailId = userDTO.getEmail();
     Optional<User> userByEmail = userDao.findUserByEmail(emailId);
     if (userByEmail.isPresent()) {
       User user = userByEmail.get();
+      Long id = user.getId();
       String hashedPassword = user.getPassword();
       BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-      return bCryptPasswordEncoder.matches(userDTO.getPassword(), hashedPassword);
+      Boolean avilable = bCryptPasswordEncoder.matches(userDTO.getPassword(), hashedPassword);
+      return new UserResponse(id, user.getRole().name(), avilable);
     }
-    return false;
-
+    return new UserResponse(null, null, false);
   }
 
   @Override

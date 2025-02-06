@@ -9,9 +9,17 @@ public class UserResponse {
   private String name;
   private String email;
   private String role;
+  private Boolean isPresent;
 
   public UserResponse() {
 
+  }
+
+  // Constructor
+  public UserResponse(Long id, String role, Boolean isPresent) {
+    this.id = id;
+    this.role = role;
+    this.isPresent = isPresent;
   }
 
   // Constructor
@@ -60,6 +68,14 @@ public class UserResponse {
 
   public void setRole(String role) {
     this.role = role;
+  }
+
+  public Boolean getIsPresent() {
+    return isPresent;
+  }
+
+  public void setIsPresent(Boolean isPresent) {
+    this.isPresent = isPresent;
   }
 
   @Override

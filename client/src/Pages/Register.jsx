@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
@@ -99,7 +100,6 @@ const Register = () => {
             >
               <option value="developer">Developer</option>
               <option value="tester">Tester</option>
-              <option value="admin">Admin</option>
             </select>
           </div>
 
@@ -124,6 +124,12 @@ const Register = () => {
           >
             { loading ? 'Registering...' : 'Register' }
           </button>
+          <div className="mt-4 text-center">
+            <p className="text-sm">
+              Already have an account?
+              <Link to="/login" className="text-blue-500 hover:underline">Login here</Link>
+            </p>
+          </div>
         </form>
       </div>
     </div>

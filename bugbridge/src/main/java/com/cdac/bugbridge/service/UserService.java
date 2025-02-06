@@ -1,9 +1,12 @@
 package com.cdac.bugbridge.service;
 
 import com.cdac.bugbridge.dto.UserDTO;
+import com.cdac.bugbridge.dto.UserResponse;
 import com.cdac.bugbridge.exception.UserException;
 import com.cdac.bugbridge.models.User;
 import com.cdac.bugbridge.response.UserApiResponse;
+
+import jakarta.validation.Valid;
 
 public interface UserService {
 
@@ -16,7 +19,7 @@ public interface UserService {
 
   // for login authentication
   // Only Developer and Tester roles allowed
-  boolean findUserByEmail(UserDTO userDTO);
+  UserResponse validUserByEmail(UserDTO userDTO);
 
   // finding a user by userId -- DONE
   boolean findUserById(UserDTO userDTO);
@@ -36,8 +39,6 @@ public interface UserService {
   // Changing details of user including password, email, role -- DONE
   UserApiResponse updateUser(Long userId, UserDTO userDTO);
 
-
   // Omkar Modifing the Code
-
 
 }
