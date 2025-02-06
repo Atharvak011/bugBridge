@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../context/UserContext';
 
+import { USERURL, BUGURL, APIURL } from "../config";
+
+const apiurl = APIURL;
+
 const Header = () => {
   const { user, logout } = useContext(UserContext); // Access user context
   const navigate = useNavigate();
@@ -35,7 +39,7 @@ const Header = () => {
   // Fetch notifications
   useEffect(() => {
     axios
-      .get('http://localhost:8080/api/notifications', {
+      .get(`${apiurl}/notifications`, {
         // EDIT HERE UNCOMMENT THIS CODE  ---------------------------------------------------------------
         // headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       })
@@ -56,9 +60,11 @@ const Header = () => {
   // }
 
   return (
+
+
     <header className="bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-white px-6 py-4 flex justify-between items-center shadow-md">
       {/* Logo / Brand */ }
-      <h1 className="text-xl font-bold">BugBridge</h1>
+      <h1 className="text-xl font-bold text-white neon-text2">BugBridge</h1>
       {/* Logout Button */ }
 
       {/* Navigation Icons */ }
@@ -106,7 +112,8 @@ const Header = () => {
         {/* Profile Button */ }
         <button
           onClick={ () => navigate('/profile') }
-          className="p-2 bg-gray-300 dark:bg-gray-700 rounded-lg"
+          className="p-2 bg-gray-300 dark:bg-gray-700 rounded-lg transition-all duration-300 
+             hover:shadow-[0_0_10px_#ff4747,0_0_20px_#ff6b6b,0_0_30px_#ff8787] hover:bg-green-600"
         >
           👤
         </button>
@@ -114,12 +121,14 @@ const Header = () => {
         {/* Logout Button */ }
         <button
           onClick={ handleLogout }
-          className="px-4 py-2 bg-red-500 text-white rounded-lg"
+          className="px-4 py-2 bg-red-500 text-white rounded-lg transition-all duration-300 
+             hover:shadow-[0_0_10px_#ff4747,0_0_20px_#ff6b6b,0_0_30px_#ff8787] hover:bg-blue-600"
         >
           Logout
         </button>
+
       </div>
-    </header>
+    </header >
   );
 };
 

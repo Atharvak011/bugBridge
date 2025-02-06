@@ -30,7 +30,8 @@ const Login = () => {
     try {
       const res = await axios.post('http://localhost:8080/api/users/authenticate', credentials);
       if (res.data.message === 'Authentication Success' && res.status === 200) {
-        const { token, user } = res.data;
+        const { user } = res.data;
+        // const { token, user } = res.data;
 
         // Store token & user data
         // localStorage.setItem('token', token);
@@ -86,7 +87,7 @@ const Login = () => {
         <div className="mt-4 text-center">
           <p className="text-sm">
             Don't have an account?
-            <Link to="/registeration " className="text-blue-500 hover:underline">Register here</Link>
+            <Link to="/register " className="text-blue-500 hover:underline">Register here</Link>
           </p>
         </div>
       </div>

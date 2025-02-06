@@ -160,8 +160,7 @@ public class BugServiceImpl implements BugService {
     if (bugDTO.getAssignedTo() == null) {
 
     }
-    // if (oldAssignedTo == null || !oldAssignedTo.equals(savedBug.getAssignedTo()))
-    // {
+
     if ((oldAssignedTo == null || !oldAssignedTo.equals(savedBug.getAssignedTo()))
         && savedBug.getAssignedTo() != null) {
       User reporter = savedBug.getReportedBy(); // Assuming reportedBy is available
