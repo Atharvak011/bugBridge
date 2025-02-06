@@ -21,7 +21,7 @@ const Sidebar = () => {
         </li>
         <li className={ `flex items-center gap-2 p-3 rounded ${location.pathname === "/allBugs" ? "bg-gray-700" : ""}` } onClick={ () => navigate("/allBugs") }>
           <ListCollapseIcon className="w-5 h-5" />
-          { !collapsed && <span>Report Bugs</span> }
+          { !collapsed && <span>All Bugs</span> }
         </li>
         <li className={ `flex items-center gap-2 p-3 rounded ${location.pathname === "/addBug" ? "bg-gray-700" : ""}` } onClick={ () => navigate("/addBug") }>
           <Bug className="w-5 h-5" />

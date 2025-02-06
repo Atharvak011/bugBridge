@@ -157,34 +157,41 @@ public class BugServiceImpl implements BugService {
     Bug savedBug = bugDAO.updateBug(existingBug);
 
     // Check if the assignedTo field was updated
-    if (oldAssignedTo == null || !oldAssignedTo.equals(savedBug.getAssignedTo())) {
-      // Automatically create a BugAssignment entry if the assignedTo has changed
+    if (bugDTO.getAssignedTo() == null) {
+
+    }
+    // if (oldAssignedTo == null || !oldAssignedTo.equals(savedBug.getAssignedTo()))
+    // {
+    if ((oldAssignedTo == null || !oldAssignedTo.equals(savedBug.getAssignedTo()))
+        && savedBug.getAssignedTo() != null) {
       User reporter = savedBug.getReportedBy(); // Assuming reportedBy is available
       User developer = savedBug.getAssignedTo();
       BugAssignment assignment = new BugAssignment(reporter, savedBug, developer);
       assignment.setBug(savedBug);
       bugAssignmentRepository.save(assignment);
-
-      // // Log the assignment
-      // System.out.println("******");
-      // System.out
-      // .println("ReportedBy: " + (savedBug.getReportedBy() != null ?
-      // savedBug.getReportedBy().getId() : "null"));
-      // System.out.println("******");
-      // System.out
-      // .println("AssignedTo: " + (savedBug.getAssignedTo() != null ?
-      // savedBug.getAssignedTo().getId() : "null"));
-      // System.out.println("******");
     }
 
-    // Map saved bug to BugDTO for response
-    // BugDTO bugDTOresponse = modelMapper.map(savedBug, BugDTO.class);
     BugDTO bugDTOresponse = mapBugToDTO(savedBug);
-
     // Return response
     return new BugApiResponse(200, "Bug Updated", "/api/bugs/", bugDTOresponse);
   }
 
+  // --------------------------------------------------------------------------------
+  @Override
+  public BugApiResponse softDeleteBug(Long id) {
+    Bug bug = bugDAO.findBugById(id)
+        .orElse(null);
+    if (bug == null) {
+      return new BugApiResponse(404, "Bug Not Found", "/api/bugs/");
+    }
+    bug.setIsDeleted(true);
+    bug.setStatus(BugStatus.RESOLVED);
+    Bug savedBug = bugDAO.updateBug(bug);
+    BugDTO bugDTO = mapBugToDTO(savedBug);
+    return new BugApiResponse(200, "Bug Soft Deleted", "/api/bugs/", bugDTO);
+  }
+
+  // mapping DTO
   @Override
   public BugDTO mapBugToDTO(Bug bug) {
     BugDTO bugDTO = new BugDTO();
@@ -200,5 +207,4 @@ public class BugServiceImpl implements BugService {
     bugDTO.setIsDeleted(bug.getIsDeleted());
     return bugDTO;
   }
-
 }

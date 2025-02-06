@@ -50,6 +50,21 @@ public class BugDTO {
     this.resolvedAt = resolvedAt;
   }
 
+  public BugDTO(String description,
+      String priority, Long reportedBy,
+      Long assignedTo, String status,
+      String resolutionReport, Boolean isDeleted, LocalDate resolvedAt) {
+
+    this.description = description;
+    this.priority = priority;
+    this.reportedBy = reportedBy;
+    this.assignedTo = assignedTo;
+    this.status = status;
+    this.resolutionReport = resolutionReport;
+    this.isDeleted = isDeleted;
+    this.resolvedAt = resolvedAt;
+  }
+
   // Getters and Setters
   public Long getId() {
     return id;
