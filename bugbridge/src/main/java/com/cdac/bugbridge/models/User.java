@@ -7,7 +7,7 @@ import com.cdac.bugbridge.util.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "users")
@@ -18,12 +18,11 @@ public class User {
   private Long id;
 
   @Column(name = "name", nullable = false)
-  // @Pattern(regexp = "^[a-zA-Z ]{3,50}$", message = "Name must contain only
-  // letters and spaces, with 3-50 characters.")
+  @Pattern(regexp = "^[a-zA-Z ]{3,50}$", message = "Name must contain onlyletters and spaces, with 3-50 characters.")
   private String name;
 
   @Column(name = "email", unique = true, nullable = false)
-  @Email(message = "Email should be valid.")
+  @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$", message = "Invalid email format.")
   private String email;
 
   @Column(name = "role", nullable = false)

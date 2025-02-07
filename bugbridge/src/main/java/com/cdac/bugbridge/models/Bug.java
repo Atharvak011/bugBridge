@@ -22,10 +22,6 @@ public class Bug {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  // @Column(name = "date_reported", nullable = false, updatable = false)
-  // private LocalDateTime dateReported = LocalDateTime.now();
-
   @JsonFormat(pattern = "yyyy-MM-dd")
   @Column(name = "date_reported", nullable = false, updatable = false)
   private LocalDate dateReported = LocalDate.now();
@@ -77,7 +73,7 @@ public class Bug {
   // Getters and Setters
 
   public Bug(User developer) {
-    //TODO Auto-generated constructor stub
+    // TODO Auto-generated constructor stub
   }
 
   public Long getId() {

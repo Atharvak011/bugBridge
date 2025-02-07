@@ -37,7 +37,9 @@ public class BugController {
         request.getAssignedTo(),
         request.getDescription(),
         request.getPriority());
-    return ResponseEntity.ok(createdBugResponse);
+    return ResponseEntity.status(HttpStatus.CREATED).body(createdBugResponse);
+    // return ResponseEntity.created(null).body(createdBugResponse);
+    // return ResponseEntity.ok(createdBugResponse);
   }
 
   // List a/all new Bug -- // --DONE
