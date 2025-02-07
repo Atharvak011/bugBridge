@@ -3,10 +3,7 @@ package com.cdac.bugbridge.service;
 import com.cdac.bugbridge.dto.UserDTO;
 import com.cdac.bugbridge.dto.UserResponse;
 import com.cdac.bugbridge.exception.UserException;
-import com.cdac.bugbridge.models.User;
 import com.cdac.bugbridge.response.UserApiResponse;
-
-import jakarta.validation.Valid;
 
 public interface UserService {
 

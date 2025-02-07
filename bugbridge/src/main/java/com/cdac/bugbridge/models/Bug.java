@@ -72,8 +72,8 @@ public class Bug {
 
   // Getters and Setters
 
-  public Bug(User developer) {
-    // TODO Auto-generated constructor stub
+  public Bug(User assignedTo) {
+    this.assignedTo = assignedTo;
   }
 
   public Long getId() {

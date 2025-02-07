@@ -44,7 +44,7 @@ public class BugApiResponse {
   }
 
   public BugApiResponse() {
-    //TODO Auto-generated constructor stub
+
   }
 
   // Getters and setters

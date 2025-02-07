@@ -16,8 +16,11 @@ public class BugAssignmentApiResponse {
   private int status;
   private String message;
   private String path;
-  private List<BugAssignment> bugAssignment;
+  // private List<BugAssignment> bugAssignment;
   private BugAssignmentDTO bugAssignmentDTO;
+
+  // Optional field for list of assignments
+  private List<BugAssignmentDTO> bugAssignmentDTOList;
 
   // Constructor for a single BugAssignmentDTO
   public BugAssignmentApiResponse(int status, String message, String path, BugAssignmentDTO bugAssignmentDTO) {
@@ -107,6 +110,4 @@ public class BugAssignmentApiResponse {
     this.bugAssignmentDTOList = bugAssignmentDTOList;
   }
 
-  // Optional field for list of assignments
-  private List<BugAssignmentDTO> bugAssignmentDTOList;
 }
