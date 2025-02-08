@@ -64,7 +64,7 @@ const Header = () => {
 
     <header className="bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-white px-6 py-4 flex justify-between items-center shadow-md">
       {/* Logo / Brand */ }
-      <h1 className="text-xl font-bold text-white neon-text2">BugBridge</h1>
+      <h1 className="text-xl font-bold text-white ">BugBridge</h1>
       {/* Logout Button */ }
 
       {/* Navigation Icons */ }

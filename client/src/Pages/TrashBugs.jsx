@@ -123,12 +123,12 @@ const TrashBugs = () => {
             ) }
             <p>Status: { bug.status }</p>
             <p>Priority: { bug.priority }</p>
-            <select onChange={ (e) => handleUpdate(bug.id, { assignedTo: e.target.value }) } className="border p-2 rounded">
+            {/* <select onChange={ (e) => handleUpdate(bug.id, { assignedTo: e.target.value }) } className="border p-2 rounded">
               <option value="">Assign Developer</option>
               { developers.map((dev) => (
                 <option key={ dev.id } value={ dev.id }>{ dev.name }</option>
               )) }
-            </select>
+            </select> */}
             <select onChange={ (e) => handleUpdate(bug.id, { priority: e.target.value }) } className="border p-2 rounded">
               <option>Change Priority</option>
               <option value="LOW">LOW</option>
@@ -144,6 +144,7 @@ const TrashBugs = () => {
             <button onClick={ () => handleUpdate(bug.id, { isDeleted: !bug.isDeleted }) } className="bg-green-500 text-white px-3 py-2 rounded transition-all duration-300 hover:bg-sky-700">
               Recover
             </button>
+            <button onClick={ () => handleDelete(bug.id) } className="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-700">Delete</button>
           </div>
         )) }
       </div>

@@ -105,7 +105,7 @@ const AllBugs = () => {
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Bugs</h2>
+      <h2 className="text-2xl font-bold mb-6">ALL Bugs</h2>
 
       {/* Filter & Sort Options */ }
       <div className="mb-4 flex gap-4">

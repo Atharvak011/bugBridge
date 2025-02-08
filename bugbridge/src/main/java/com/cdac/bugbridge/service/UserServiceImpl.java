@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
       String hashedPassword = user.getPassword();
       BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
       Boolean isAvilable = bCryptPasswordEncoder.matches(userDTO.getPassword(), hashedPassword);
-      return new UserResponse(id, user.getRole().name(), isAvilable);
+      return new UserResponse(id, user.getName(), user.getEmail(), user.getRole().name(), isAvilable);
     }
     return new UserResponse(null, null, false);
   }

@@ -11,6 +11,7 @@ import Layout from "./components/Layout";
 import PrivateRoute from "./components/PrivateRoute";
 import RoleBasedRoute from "./components/RoleBasedRoute";
 import TrashBugs from "./Pages/TrashBugs";
+import AdminDash from "./Pages/AdminDash";
 
 const App = () => {
   return (
@@ -72,6 +73,17 @@ const App = () => {
               <RoleBasedRoute allowedRoles={ ["TESTER", "ADMIN"] }>
                 <Layout>
                   <TrashBugs />
+                </Layout>
+              </RoleBasedRoute>
+            }
+          />
+          <Route
+            path="/adminDash"
+            element={
+              <RoleBasedRoute allowedRoles={ ["TESTER", "ADMIN"] }>
+                {/* "TESTER",  */ }
+                <Layout>
+                  <AdminDash />
                 </Layout>
               </RoleBasedRoute>
             }

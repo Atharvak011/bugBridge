@@ -37,6 +37,14 @@ public class UserResponse {
     this.role = role;
   }
 
+  public UserResponse(Long id, String name, String email, String role, Boolean isAvilable) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+    this.role = role;
+    this.isPresent = isAvilable;
+  }
+
   // Getters and Setters
   public Long getId() {
     return id;

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
+import { USERURL } from '../config';
+const userUrl = USERURL;
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -33,9 +34,8 @@ const Register = () => {
 
     try {
       // Make POST request to register the user
-      const response = await axios.post('http://localhost:8080/api/users/register', userData);
+      const response = await axios.post(`${userUrl}/register`, userData);
 
-      // Handling success response
       if (response.status === 200) {
         navigate('/login'); // Redirect to login page after successful registration
       }
