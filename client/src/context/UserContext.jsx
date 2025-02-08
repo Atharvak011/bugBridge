@@ -38,10 +38,8 @@ export const UserProvider = ({ children }) => {
         setUser(dummyUser);
         localStorage.setItem("user", JSON.stringify(dummyUser));
       }
-
       setLoading(false);
     };
-
     loadUser();
   }, []);
 
