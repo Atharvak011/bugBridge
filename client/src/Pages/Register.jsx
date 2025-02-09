@@ -18,7 +18,7 @@ const Register = () => {
     setError('');
     setLoading(true);
 
-    // Validate form fields
+
     if (!name || !email || !password) {
       setError('All fields are required');
       setLoading(false);
@@ -33,7 +33,7 @@ const Register = () => {
     };
 
     try {
-      // Make POST request to register the user
+
       const response = await axios.post(`${userUrl}/register`, userData);
 
       if (response.status === 200) {

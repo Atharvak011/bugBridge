@@ -12,6 +12,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import RoleBasedRoute from "./components/RoleBasedRoute";
 import TrashBugs from "./Pages/TrashBugs";
 import AdminDash from "./Pages/AdminDash";
+import Assigned from "./Pages/Assigned";
 
 const App = () => {
   return (
@@ -70,7 +71,7 @@ const App = () => {
           <Route
             path="/trashBugs"
             element={
-              <RoleBasedRoute allowedRoles={ ["TESTER", "ADMIN"] }>
+              <RoleBasedRoute allowedRoles={ ["ADMIN"] }>
                 <Layout>
                   <TrashBugs />
                 </Layout>
@@ -80,7 +81,7 @@ const App = () => {
           <Route
             path="/adminDash"
             element={
-              <RoleBasedRoute allowedRoles={ ["TESTER", "ADMIN"] }>
+              <RoleBasedRoute allowedRoles={ ["ADMIN"] }>
                 {/* "TESTER",  */ }
                 <Layout>
                   <AdminDash />
@@ -89,6 +90,17 @@ const App = () => {
             }
           />
 
+          <Route
+            path="/assignedBugs"
+            element={
+              <RoleBasedRoute allowedRoles={ ["DEVELOPER"] }>
+                {/* "TESTER",  */ }
+                <Layout>
+                  <Assigned />
+                </Layout>
+              </RoleBasedRoute>
+            }
+          />
           {/* Redirect unknown routes to Dashboard if logged in, else Login */ }
           <Route path="*" element={ <Navigate to="/dashboard" /> } />
         </Routes>

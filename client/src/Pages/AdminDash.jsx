@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-// import './AdminDash.css'; // Import the updated CSS file
+
 
 const AdminDash = () => {
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch user list on component mount
+
     const fetchUserList = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/users/admin/allUsers');
@@ -22,7 +22,7 @@ const AdminDash = () => {
     fetchUserList();
   }, []);
 
-  // Handle user deletion
+
   const handleDeleteUser = async (userId) => {
     try {
       const response = await axios.delete(`http://localhost:8080/api/users/admin/deleteUser/${userId}`);
@@ -36,7 +36,7 @@ const AdminDash = () => {
     }
   };
 
-  // Pie chart data
+
   const getRoleStats = () => {
     const roleCounts = { DEVELOPER: 0, TESTER: 0 };
 
@@ -67,7 +67,10 @@ const AdminDash = () => {
         <div className="dashboard-content">
           {/* Pie chart for Developer vs Tester */ }
           <div className="chart-container">
-            <h3>Role Distribution</h3>
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4 mt-6">
+              Admin Dashboard - User Roles
+            </h3>
+
             <ResponsiveContainer width="100%" height={ 300 }>
               <PieChart>
                 <Pie

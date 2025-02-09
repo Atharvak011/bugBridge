@@ -2,7 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { UserContext } from "../context/UserContext";
-
+import { BUGURL } from "../config";
+const bugUrl = BUGURL;
 const Dashboard = () => {
   const { user } = useContext(UserContext);
   const [bugs, setBugs] = useState([]);
@@ -13,9 +14,18 @@ const Dashboard = () => {
     if (!user) return;
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:8080/api/bugs/allBugs?user_id=${user.id}`);
-      // const response = await axios.get(`http://localhost:8080/api/bugs/allBugs?user_id=14`);
-      setBugs(response.data.bugList || []);
+      if (user.role === "ADMIN") {
+        const response = await axios.get(`${bugUrl}/allBugs`);
+        setBugs(response.data.bugList);
+      } else {
+        const response = await axios.get(`${bugUrl}/allBugs?user_id=${user.id}`);
+        setBugs(response.data.bugList);
+      }
+      if (user.role === "DEVELOPER") {
+        const response = await axios.get(`${bugUrl}/assigned/${user.id}`);
+        setBugs(response.data.bugList);
+      }
+      // setBugs(response.data.bugList || []);
       setError(null);
     } catch (err) {
       setError("Failed to fetch bugs");

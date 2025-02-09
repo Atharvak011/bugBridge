@@ -1,7 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { UserContext } from "../context/UserContext";
 import axios from 'axios';
+import { USERURL } from '../config';
 
+const userUrl = USERURL;
 const Profile = () => {
   const { user, updateUser } = useContext(UserContext);
   const [formData, setFormData] = useState({
@@ -20,6 +22,45 @@ const Profile = () => {
   };
 
   // Handle form submission (API Call)
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   // Prevent submission if nothing has changed
+  //   if (
+  //     formData.name === user.name &&
+  //     formData.email === user.email
+  //   ) {
+  //     alert("No changes detected.");
+  //     setIsEditing(false);
+  //     return;
+  //   }
+
+  //   setIsSubmitting(true);
+
+  //   try {
+  //     const res = await axios.patch(
+  //       `${userUrl}/updateUserDetails`,
+  //       formData,
+  //       {
+  //         // headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+  //       }
+  //     );
+
+  //     updateUser(res.data); // Update context with new user data
+  //     alert('Profile updated successfully!');
+  //     setIsEditing(false);
+  //   } catch (error) {
+  //     console.error('Error updating profile:', error);
+  //     alert(error.response?.data?.message || 'Failed to update profile.');
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+
+
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -36,15 +77,16 @@ const Profile = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await axios.patch(
-        'http://localhost:8080/api/users/updateUserDetails',
-        formData,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        }
-      );
+      const res = await axios.patch(`${userUrl}/updateUserDetails`, formData);
+      console.log(res.data);
+      updateUser(res.data.data);  // Update context with new user data
 
-      updateUser(res.data); // Update context with new user data
+      // If email or other session-related data changed, handle session refresh
+      if (formData.email !== user.email) {
+        // Example: Refresh the session or authentication state
+        localStorage.setItem('user', JSON.stringify(res.data));
+      }
+
       alert('Profile updated successfully!');
       setIsEditing(false);
     } catch (error) {
@@ -54,6 +96,7 @@ const Profile = () => {
       setIsSubmitting(false);
     }
   };
+
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">

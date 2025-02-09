@@ -22,8 +22,13 @@ const AllBugs = () => {
   useEffect(() => {
     const fetchBugs = async () => {
       try {
-        const response = await axios.get(`${bugUrl}/allBugs?user_id=${user.id}`);
-        setBugs(response.data.bugList);
+        if (user.role === "ADMIN") {
+          const response = await axios.get(`${bugUrl}/allBugs`);
+          setBugs(response.data.bugList);
+        } else {
+          const response = await axios.get(`${bugUrl}/allBugs?user_id=${user.id}`);
+          setBugs(response.data.bugList);
+        }
       } catch (err) {
         setError("Failed to fetch bugs.");
       } finally {

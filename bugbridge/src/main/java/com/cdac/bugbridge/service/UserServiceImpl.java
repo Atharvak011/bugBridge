@@ -136,10 +136,10 @@ public class UserServiceImpl implements UserService {
           // .ifPresent(role -> user.setRole(role.toUpperCase()));
           Optional.ofNullable(userDTO.getName()).ifPresent(user::setName);
           Optional.ofNullable(userDTO.getEmail()).ifPresent(user::setEmail);
-
+          UserResponse userResponse = modelMapper.map(user, UserResponse.class);
           int rowsAffected = userDao.updateUser(userId, user);
           return rowsAffected > 0
-              ? new UserApiResponse(201, "User Details Updated", "api/users/profileInfo")
+              ? new UserApiResponse(201, "User Details Updated", "api/users/profileInfo", userResponse)
               : new UserApiResponse(403, "User Details Not Updated", "api/users/profileInfo");
         })
         .orElse(new UserApiResponse(404, "User Not Found", "api/users/profileInfo"));

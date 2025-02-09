@@ -2,6 +2,8 @@ package com.cdac.bugbridge.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +13,12 @@ import com.cdac.bugbridge.dto.BugDTO;
 import com.cdac.bugbridge.models.Bug;
 import com.cdac.bugbridge.models.BugAssignment;
 import com.cdac.bugbridge.models.User;
+import com.cdac.bugbridge.repository.BugRepository;
 import com.cdac.bugbridge.repository.UserRepository;
 import com.cdac.bugbridge.response.BugApiResponse;
 import com.cdac.bugbridge.response.BugAssignmentApiResponse;
 import com.cdac.bugbridge.service.BugService;
+import com.cdac.bugbridge.util.UserRole;
 
 @RestController
 @RequestMapping("/api/bugs")
@@ -22,6 +26,8 @@ public class BugController {
 
   @Autowired
   UserRepository userRepository;
+  @Autowired
+  BugRepository bugRepository;
   private final BugService bugService;
 
   // @Autowired
@@ -113,6 +119,39 @@ public class BugController {
     }
     BugApiResponse response = new BugApiResponse(200, "Fetched", "/api/bugs/test", list);
     return ResponseEntity.ok(response);
+  }
+
+  // Get bugs assigned to a developer by their ID
+  @GetMapping("/assigned/{developerId}")
+  public ResponseEntity<BugApiResponse> getAssignedBugs(@PathVariable Long developerId) {
+    // Check if the user exists and is a developer
+    Optional<User> userOptional = userRepository.findById(developerId);
+
+    if (userOptional.isEmpty()) {
+      return ResponseEntity.status(404).body(null); // User not found
+    }
+
+    User user = userOptional.get();
+
+    if (user.getRole() != UserRole.DEVELOPER) {
+      return ResponseEntity.status(403).body(null); // Forbidden access
+    }
+
+    // Fetch the bugs assigned to this developer
+    List<Bug> assignedBugs = bugRepository.findByAssignedTo(user);
+
+    if (assignedBugs.isEmpty()) {
+      return ResponseEntity.status(404).body(null); // No bugs assigned
+    }
+    List<BugDTO> list = new ArrayList<>();
+    for (Bug bug : assignedBugs) {
+      BugDTO bugDTO = new BugDTO();
+      bugDTO = bugService.mapBugToDTO(bug);
+      list.add(bugDTO);
+      // System.out.println(bug);
+    }
+    // Return the list of assigned bugs
+    return ResponseEntity.ok(new BugApiResponse(200, "Fetched", "/api/bugs/assigned", list));
   }
 
 }

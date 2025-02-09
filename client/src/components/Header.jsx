@@ -38,13 +38,14 @@ const Header = () => {
 
   // Fetch notifications
   useEffect(() => {
-    axios
-      .get(`${apiurl}/notifications`, {
-        // EDIT HERE UNCOMMENT THIS CODE  ---------------------------------------------------------------
-        // headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      })
-      .then((res) => setNotifications(res.data))
-      .catch((err) => console.error('Error fetching notifications', err));
+    // axios.get(`${apiurl}/notifications`, 
+    //   {
+    //   // EDIT HERE UNCOMMENT THIS CODE  ---------------------------------------------------------------
+    //   // headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    // })
+    //   .then((res) => setNotifications(res.data))
+    //   .catch((err) => console.error('Error fetching notifications', err));
+
   }, []);
 
   // Handle logout
