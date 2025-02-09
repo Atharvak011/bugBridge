@@ -124,26 +124,64 @@ public class UserServiceImpl implements UserService {
     return new UserApiResponse(200, "List of All users", "/api/users/admin/users", null, userList);
   }
 
+  // @Override
+  // @Transactional
+  // public UserApiResponse updateUser(Long userId, UserDTO userDTO) {
+  // return userDao.findUserById(userId)
+  // .map(user -> {
+  // Optional.ofNullable(userDTO.getRole())
+  // .map(String::trim)
+  // .filter(role -> !role.isEmpty())
+  // .ifPresent(user::setRole);
+  // // .ifPresent(role -> user.setRole(role.toUpperCase()));
+  // Optional.ofNullable(userDTO.getName()).ifPresent(user::setName);
+  // Optional.ofNullable(userDTO.getEmail()).ifPresent(user::setEmail);
+  // UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+  // int rowsAffected = userDao.updateUser(userId, user);
+  // return rowsAffected > 0
+  // ? new UserApiResponse(201, "User Details Updated", "api/users/profileInfo",
+  // userResponse)
+  // : new UserApiResponse(403, "User Details Not Updated",
+  // "api/users/profileInfo");
+  // })
+  // .orElse(new UserApiResponse(404, "User Not Found", "api/users/profileInfo"));
+  // }
+
   @Override
   @Transactional
   public UserApiResponse updateUser(Long userId, UserDTO userDTO) {
     return userDao.findUserById(userId)
         .map(user -> {
+          // Update role if provided
           Optional.ofNullable(userDTO.getRole())
               .map(String::trim)
               .filter(role -> !role.isEmpty())
               .ifPresent(user::setRole);
-          // .ifPresent(role -> user.setRole(role.toUpperCase()));
+
+          // Update name if provided
           Optional.ofNullable(userDTO.getName()).ifPresent(user::setName);
+
+          // Update email if provided
           Optional.ofNullable(userDTO.getEmail()).ifPresent(user::setEmail);
+
+          // Check if password is provided, then hash it using BCrypt
+          Optional.ofNullable(userDTO.getPassword()).ifPresent(password -> {
+            String hashedPassword = new BCryptPasswordEncoder().encode(password);
+            user.setPassword(hashedPassword); // Set the hashed password
+          });
+
+          // Map user to response
           UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+
+          // Perform the update operation
           int rowsAffected = userDao.updateUser(userId, user);
+
+          // Return appropriate response
           return rowsAffected > 0
               ? new UserApiResponse(201, "User Details Updated", "api/users/profileInfo", userResponse)
               : new UserApiResponse(403, "User Details Not Updated", "api/users/profileInfo");
         })
         .orElse(new UserApiResponse(404, "User Not Found", "api/users/profileInfo"));
-
   }
 
 }
