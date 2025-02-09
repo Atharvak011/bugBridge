@@ -37,7 +37,6 @@ public class BugServiceImpl implements BugService {
 
   private final ModelMapper modelMapper;
 
-  // @Autowired
   public BugServiceImpl(BugDAO bugDAO, ModelMapper modelMapper) {
     this.modelMapper = modelMapper;
     this.bugDAO = bugDAO;
@@ -126,10 +125,8 @@ public class BugServiceImpl implements BugService {
 
     Bug existingBug = existingBugOptional.get();
 
-    // Keep track of the old assignedTo value to check for changes
     User oldAssignedTo = existingBug.getAssignedTo();
 
-    // Update fields if the value is not null in the DTO
     if (bugDTO.getDescription() != null) {
       existingBug.setDescription(bugDTO.getDescription());
     }
@@ -153,17 +150,15 @@ public class BugServiceImpl implements BugService {
       existingBug.setIsDeleted(bugDTO.getIsDeleted());
     }
 
-    // Save updated bug
     Bug savedBug = bugDAO.updateBug(existingBug);
 
-    // Check if the assignedTo field was updated
     if (bugDTO.getAssignedTo() == null) {
 
     }
 
     if ((oldAssignedTo == null || !oldAssignedTo.equals(savedBug.getAssignedTo()))
         && savedBug.getAssignedTo() != null) {
-      User reporter = savedBug.getReportedBy(); // Assuming reportedBy is available
+      User reporter = savedBug.getReportedBy();
       User developer = savedBug.getAssignedTo();
       BugAssignment assignment = new BugAssignment(reporter, savedBug, developer);
       assignment.setBug(savedBug);
@@ -171,7 +166,7 @@ public class BugServiceImpl implements BugService {
     }
 
     BugDTO bugDTOresponse = mapBugToDTO(savedBug);
-    // Return response
+
     return new BugApiResponse(200, "Bug Updated", "/api/bugs/", bugDTOresponse);
   }
 

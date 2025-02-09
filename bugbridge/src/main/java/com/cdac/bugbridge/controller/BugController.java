@@ -30,12 +30,10 @@ public class BugController {
   BugRepository bugRepository;
   private final BugService bugService;
 
-  // @Autowired
   public BugController(BugService bugService) {
     this.bugService = bugService;
   }
 
-  // cretae a new Bug -- // --DONE
   @PostMapping("/create")
   public ResponseEntity<BugApiResponse> createBug(@RequestBody BugDTO request) {
     BugApiResponse createdBugResponse = bugService.createBug(
@@ -44,11 +42,9 @@ public class BugController {
         request.getDescription(),
         request.getPriority());
     return ResponseEntity.status(HttpStatus.CREATED).body(createdBugResponse);
-    // return ResponseEntity.created(null).body(createdBugResponse);
-    // return ResponseEntity.ok(createdBugResponse);
   }
 
-  // List a/all new Bug -- // --DONE
+  // List all new Bug -- // --DONE
   @GetMapping("/allBugs")
   public ResponseEntity<BugApiResponse> getAllBugs(
       @RequestParam(name = "user_id", required = false) Long id) {
@@ -128,29 +124,28 @@ public class BugController {
     Optional<User> userOptional = userRepository.findById(developerId);
 
     if (userOptional.isEmpty()) {
-      return ResponseEntity.status(404).body(null); // User not found
+      return ResponseEntity.status(404).body(null);
     }
 
     User user = userOptional.get();
 
     if (user.getRole() != UserRole.DEVELOPER) {
-      return ResponseEntity.status(403).body(null); // Forbidden access
+      return ResponseEntity.status(403).body(null);
     }
 
     // Fetch the bugs assigned to this developer
     List<Bug> assignedBugs = bugRepository.findByAssignedTo(user);
 
     if (assignedBugs.isEmpty()) {
-      return ResponseEntity.status(404).body(null); // No bugs assigned
+      return ResponseEntity.status(404).body(null);
     }
     List<BugDTO> list = new ArrayList<>();
     for (Bug bug : assignedBugs) {
       BugDTO bugDTO = new BugDTO();
       bugDTO = bugService.mapBugToDTO(bug);
       list.add(bugDTO);
-      // System.out.println(bug);
+
     }
-    // Return the list of assigned bugs
     return ResponseEntity.ok(new BugApiResponse(200, "Fetched", "/api/bugs/assigned", list));
   }
 

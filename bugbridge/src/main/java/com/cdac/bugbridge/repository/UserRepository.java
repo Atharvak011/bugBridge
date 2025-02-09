@@ -15,7 +15,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    // find user by email
     Optional<User> findByEmail(String email);
 
     @Modifying
@@ -23,14 +22,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     int updateById(@Param("userId") Long uniqueId, @Param("newEmail") String newEmail,
             @Param("name") String name, @Param("role") UserRole role);
 
-    // deleting user by ID
     @Modifying
     @Query("DELETE from User u WHERE u.id = :userId")
     int deleteUserById(@Param("userId") Long userId);
 
-    // finding users by role
-    List<User> findByRole(UserRole role);
 
-    
+    List<User> findByRole(UserRole role);
 
 }

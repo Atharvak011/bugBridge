@@ -17,7 +17,6 @@ public class BugDAOImpl implements BugDAO {
     this.bugRepository = bugRepository;
   }
 
-  // create a bug
   @Override
   public Bug createBug(Bug entityBug) {
     return bugRepository.save(entityBug);

@@ -5,9 +5,9 @@ import java.time.LocalDate;
 public class BugAssignmentDTO {
 
   private Long id;
-  private String tester; // Tester name or identifier
-  private String developer; // Developer name or identifier
-  private Long bugId; // ID of the associated bug
+  private String tester;
+  private String developer;
+  private Long bugId;
   private LocalDate assignedAt;
 
   public BugAssignmentDTO(Long id, String tester, String developer, Long bugId, LocalDate assignedAt) {

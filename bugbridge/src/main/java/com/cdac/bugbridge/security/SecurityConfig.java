@@ -14,12 +14,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for testing purposes
+                .csrf(csrf -> csrf.disable())
                 .cors(cors -> {
-                }) // Enable CORS with default configuration
+                })
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // Allow all requests without authentication
-                );
+                        .anyRequest().permitAll());
         return http.build();
     }
 
@@ -33,10 +32,10 @@ public class SecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") // Allow all endpoints
-                        .allowedOrigins("*") // Allow all origins
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS") // Allow all methods
-                        .allowedHeaders("*"); // Allow all headers
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                        .allowedHeaders("*");
             }
         };
     }

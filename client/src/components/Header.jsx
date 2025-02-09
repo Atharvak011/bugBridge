@@ -30,21 +30,10 @@ const Header = () => {
     }
   }, [darkMode]);
 
-  // useEffect(() => {
-  //   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  //   setDarkMode(localStorage.getItem('theme') === 'dark' || prefersDark);
-  // }, []);
 
 
   // Fetch notifications
   useEffect(() => {
-    // axios.get(`${apiurl}/notifications`, 
-    //   {
-    //   // EDIT HERE UNCOMMENT THIS CODE  ---------------------------------------------------------------
-    //   // headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-    // })
-    //   .then((res) => setNotifications(res.data))
-    //   .catch((err) => console.error('Error fetching notifications', err));
 
   }, []);
 

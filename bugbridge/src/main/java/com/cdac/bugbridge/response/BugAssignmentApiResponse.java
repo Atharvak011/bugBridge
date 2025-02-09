@@ -12,17 +12,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({ "timestamp", "status", "message", "path", "bugAssignmentDTO", "bugAssignment" })
 public class BugAssignmentApiResponse {
 
-  private String timestamp; // You could use LocalDateTime as well
+  private String timestamp;
   private int status;
   private String message;
   private String path;
-  // private List<BugAssignment> bugAssignment;
+
   private BugAssignmentDTO bugAssignmentDTO;
 
-  // Optional field for list of assignments
   private List<BugAssignmentDTO> bugAssignmentDTOList;
 
-  // Constructor for a single BugAssignmentDTO
   public BugAssignmentApiResponse(int status, String message, String path, BugAssignmentDTO bugAssignmentDTO) {
     this.timestamp = java.time.LocalDateTime.now().toString();
     this.status = status;
@@ -31,7 +29,6 @@ public class BugAssignmentApiResponse {
     this.bugAssignmentDTO = bugAssignmentDTO;
   }
 
-  // Constructor for list of BugAssignmentDTO
   public BugAssignmentApiResponse(int status, String message, String path,
       List<BugAssignmentDTO> bugAssignmentDTOList) {
     this.timestamp = java.time.LocalDateTime.now().toString();
@@ -41,10 +38,9 @@ public class BugAssignmentApiResponse {
     this.bugAssignmentDTOList = bugAssignmentDTOList;
   }
 
-  // Constructor that accepts BugAssignments and converts them to DTOs
   public BugAssignmentApiResponse(List<BugAssignment> bugAssignments) {
     this.timestamp = java.time.LocalDateTime.now().toString();
-    this.status = 200; // You can customize the status based on your logic
+    this.status = 200;
     this.message = "Bug assignments fetched successfully";
     this.path = "/api/bugs/test/{id}";
     this.bugAssignmentDTOList = bugAssignments.stream()
@@ -61,7 +57,6 @@ public class BugAssignmentApiResponse {
         bugAssignment.getAssignedAt());
   }
 
-  // Getters and Setters
   public String getTimestamp() {
     return timestamp;
   }

@@ -7,15 +7,14 @@ import java.time.LocalDate;
 public class BugAssignmentResponse {
 
   private Long id;
-  private String tester; // Tester name or identifier
-  private String developer; // Developer name or identifier
-  private Long bugId; // ID of the associated bug
+  private String tester;
+  private String developer;
+  private Long bugId;
   private LocalDate assignedAt;
 
   public BugAssignmentResponse() {
   }
 
-  // Constructor
   public BugAssignmentResponse(Long id, String tester, String developer, Long bugId, LocalDate assignedAt) {
     this.id = id;
     this.tester = tester;
@@ -24,7 +23,6 @@ public class BugAssignmentResponse {
     this.assignedAt = assignedAt;
   }
 
-  // Getters and Setters
   public Long getId() {
     return id;
   }

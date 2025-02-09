@@ -3,13 +3,12 @@ package com.cdac.bugbridge.models;
 import com.cdac.bugbridge.util.BugPriority;
 import com.cdac.bugbridge.util.BugStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
-// import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-// import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,8 +68,6 @@ public class Bug {
     this.status = BugStatus.OPEN;
     this.resolvedAt = resolvedAt;
   }
-
-  // Getters and Setters
 
   public Bug(User assignedTo) {
     this.assignedTo = assignedTo;
@@ -160,7 +157,6 @@ public class Bug {
   public String toString() {
     return "Bug{" +
         "id=" + id +
-        // ", version=" + version +
         ", dateReported=" + dateReported +
         ", description='" + description + '\'' +
         ", priority=" + priority +

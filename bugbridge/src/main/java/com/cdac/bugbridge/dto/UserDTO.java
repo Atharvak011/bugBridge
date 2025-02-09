@@ -21,17 +21,14 @@ public class UserDTO {
             " one lowercase letter, one digit, and one special character.")
     private String password;
 
-    // Default constructor
     public UserDTO() {
     }
 
-    // constructor for Login details
     public UserDTO(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    // Constructor with fields
     public UserDTO(Long id, String name, String email, String role, String password) {
         this.id = id;
         this.name = name;
@@ -40,7 +37,6 @@ public class UserDTO {
         this.password = password;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }

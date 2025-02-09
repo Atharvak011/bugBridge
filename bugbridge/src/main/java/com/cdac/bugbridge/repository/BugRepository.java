@@ -13,6 +13,4 @@ public interface BugRepository extends JpaRepository<Bug, Long> {
 
   List<Bug> findByAssignedTo(User user);
 
-  // List<Bug> findByAssignedTo(User assignedTo);
-
 }

@@ -9,7 +9,7 @@ public enum UserRole {
     try {
       if (role == null)
         return null;
-      return UserRole.valueOf(role.trim().toUpperCase()); // Convert to uppercase
+      return UserRole.valueOf(role.trim().toUpperCase());
     } catch (IllegalArgumentException e) {
       throw new RuntimeException("Invalid role: " + role);
     }

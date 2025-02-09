@@ -29,7 +29,6 @@ public class UserController {
     return ResponseEntity.ok(new UserApiResponse(200, "Success", "/api/users/login", userResponse, null));
   }
 
-  // login Validation -- DONE
   @PostMapping("/authenticate")
   public ResponseEntity<UserApiResponse> authenticateUser(@Valid @RequestBody UserDTO userDTO) {
     UserResponse response = userService.validUserByEmail(userDTO);
@@ -40,13 +39,11 @@ public class UserController {
         .ok(new UserApiResponse(200, "Login credentials Incorrect", "/api/login", response));
   }
 
-  // update User details --DONE
   @PatchMapping("/updateUserDetails")
   public ResponseEntity<UserApiResponse> updateUserDetails(@Valid @RequestBody UserDTO userDTO) {
     return ResponseEntity.ok(userService.updateUser(userDTO.getId(), userDTO));
   }
 
-  // only admin can delete -- DONE
   @DeleteMapping("/admin/deleteUser/{userId}")
   public ResponseEntity<UserApiResponse> deleteUser(@PathVariable("userId") Long userId) {
     try {
@@ -57,21 +54,18 @@ public class UserController {
     }
   }
 
-  // want only admin role to access this api -- DONE
   @GetMapping("/singleUserById/{userId}")
   public ResponseEntity<UserApiResponse> getOneUser(@PathVariable Long userId) {
     UserApiResponse userApiResponse = userService.findUserById(userId);
     return ResponseEntity.ok(userApiResponse);
   }
 
-  // want only admin role to access this api -- DONE
   @GetMapping("/admin/allUsers")
   public ResponseEntity<UserApiResponse> getAllUsers() {
     UserApiResponse userApiResponse = userService.listAllUsers();
     return ResponseEntity.ok(userApiResponse);
   }
 
-  // want only admin role to access this api -- DONE
   @GetMapping("/{role}")
   public ResponseEntity<UserApiResponse> getUsersByRole(@PathVariable("role") String role) {
     return ResponseEntity.ok(userService.listByRole(role));

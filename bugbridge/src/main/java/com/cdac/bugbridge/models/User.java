@@ -32,7 +32,6 @@ public class User {
   @Column(name = "password", nullable = false, length = 60)
   private String password;
 
-  // Relations
   @JsonIgnore
   @OneToMany(mappedBy = "assignedTo", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Bug> assignedBugs = new ArrayList<>();
@@ -49,17 +48,14 @@ public class User {
   @OneToMany(mappedBy = "developer", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<BugAssignment> receivedBugAssignments = new ArrayList<>();
 
-  // Default Constructor
   public User() {
   }
 
-  // Parameterized Constructor for Login
   public User(String email, String password) {
     this.email = email;
     this.password = password;
   }
 
-  // Parameterized Constructor
   public User(String name, String email, UserRole role, String password) {
     this.name = name;
     this.email = email;
@@ -67,7 +63,6 @@ public class User {
     this.password = password;
   }
 
-  // Getters and Setters
   public Long getId() {
     return id;
   }

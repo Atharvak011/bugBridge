@@ -9,7 +9,7 @@ public enum BugPriority {
     try {
       if (priority == null)
         return null;
-      return BugPriority.valueOf(priority.trim().toUpperCase()); // Convert to uppercase
+      return BugPriority.valueOf(priority.trim().toUpperCase());
     } catch (IllegalArgumentException e) {
       throw new RuntimeException("Invalid role: " + priority);
     }

@@ -15,15 +15,15 @@ public class BugAssignment {
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "tester_id", nullable = false)
-  private User tester; // Tester who assigned the bug
+  private User tester;
 
   @ManyToOne
   @JoinColumn(name = "bug_id", nullable = false)
-  private Bug bug; // The assigned bug
+  private Bug bug;
 
   @ManyToOne
   @JoinColumn(name = "developer_id", nullable = false)
-  private User developer; // Developer assigned to the bug
+  private User developer;
 
   @Column(name = "assigned_at", nullable = false, updatable = false)
   private LocalDate assignedAt;
@@ -74,7 +74,4 @@ public class BugAssignment {
     return assignedAt;
   }
 
-  // public LocalDate setAssignedAt() {
-  // return assignedAt;
-  // }
 }

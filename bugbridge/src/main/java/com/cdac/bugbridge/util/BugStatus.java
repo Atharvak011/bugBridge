@@ -9,7 +9,7 @@ public enum BugStatus {
     try {
       if (bugStatus == null)
         return null;
-      return BugStatus.valueOf(bugStatus.trim().toUpperCase()); // Convert to uppercase
+      return BugStatus.valueOf(bugStatus.trim().toUpperCase());
     } catch (IllegalArgumentException e) {
       throw new RuntimeException("Invalid role: " + bugStatus);
     }
